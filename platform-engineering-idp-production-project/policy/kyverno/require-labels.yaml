@@ -1,0 +1,11 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata: {name: require-platform-labels}
+spec:
+  validationFailureAction: Audit
+  rules:
+    - name: require-team-environment
+      match: {any: [{resources: {kinds: [Deployment], namespaces: [dev, staging, production]}}]}
+      validate:
+        message: Deployments need platform team and environment labels.
+        pattern: {metadata: {labels: {platform.company.io/team: "?*", platform.company.io/environment: "?*"}}}

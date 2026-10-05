@@ -1,0 +1,7 @@
+- non-root images
+- minimal base images
+- pinned dependencies
+- no secrets in Dockerfiles
+- vulnerability scan before push
+- Kubernetes manifests scanned
+- production uses immutable tags/digests

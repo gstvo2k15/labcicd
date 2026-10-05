@@ -1,0 +1,449 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-gateway
+  namespace: order-sre
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      serviceAccountName: order-app
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: api-gateway
+          image: REPLACE_ACR/order-management/api-gateway:1.0.0
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: order-sre-config
+          env:
+            - name: SERVICE_NAME
+              value: "api-gateway"
+            - name: DATABASE_URL
+              value: "postgresql://orders:change-me-demo@postgres:5432/order_management"
+            - name: JWT_SECRET
+              value: "replace-with-secret-manager"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          startupProbe:
+            httpGet: {path: /health, port: 8000}
+            failureThreshold: 30
+            periodSeconds: 5
+          readinessProbe:
+            httpGet: {path: /ready, port: 8000}
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: {path: /health, port: 8000}
+            periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-gateway
+  namespace: order-sre
+spec:
+  selector:
+    app: api-gateway
+  ports:
+    - port: 8000
+      targetPort: 8000
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+  namespace: order-sre
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      serviceAccountName: order-app
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: user-service
+          image: REPLACE_ACR/order-management/user-service:1.0.0
+          ports:
+            - containerPort: 8001
+          envFrom:
+            - configMapRef:
+                name: order-sre-config
+          env:
+            - name: SERVICE_NAME
+              value: "user-service"
+            - name: DATABASE_URL
+              value: "postgresql://orders:change-me-demo@postgres:5432/order_management"
+            - name: JWT_SECRET
+              value: "replace-with-secret-manager"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          startupProbe:
+            httpGet: {path: /health, port: 8001}
+            failureThreshold: 30
+            periodSeconds: 5
+          readinessProbe:
+            httpGet: {path: /ready, port: 8001}
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: {path: /health, port: 8001}
+            periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+  namespace: order-sre
+spec:
+  selector:
+    app: user-service
+  ports:
+    - port: 8001
+      targetPort: 8001
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restaurant-service
+  namespace: order-sre
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: restaurant-service
+  template:
+    metadata:
+      labels:
+        app: restaurant-service
+    spec:
+      serviceAccountName: order-app
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: restaurant-service
+          image: REPLACE_ACR/order-management/restaurant-service:1.0.0
+          ports:
+            - containerPort: 8002
+          envFrom:
+            - configMapRef:
+                name: order-sre-config
+          env:
+            - name: SERVICE_NAME
+              value: "restaurant-service"
+            - name: DATABASE_URL
+              value: "postgresql://orders:change-me-demo@postgres:5432/order_management"
+            - name: JWT_SECRET
+              value: "replace-with-secret-manager"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          startupProbe:
+            httpGet: {path: /health, port: 8002}
+            failureThreshold: 30
+            periodSeconds: 5
+          readinessProbe:
+            httpGet: {path: /ready, port: 8002}
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: {path: /health, port: 8002}
+            periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: restaurant-service
+  namespace: order-sre
+spec:
+  selector:
+    app: restaurant-service
+  ports:
+    - port: 8002
+      targetPort: 8002
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service
+  namespace: order-sre
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: order-service
+  template:
+    metadata:
+      labels:
+        app: order-service
+    spec:
+      serviceAccountName: order-app
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: order-service
+          image: REPLACE_ACR/order-management/order-service:1.0.0
+          ports:
+            - containerPort: 8003
+          envFrom:
+            - configMapRef:
+                name: order-sre-config
+          env:
+            - name: SERVICE_NAME
+              value: "order-service"
+            - name: DATABASE_URL
+              value: "postgresql://orders:change-me-demo@postgres:5432/order_management"
+            - name: JWT_SECRET
+              value: "replace-with-secret-manager"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          startupProbe:
+            httpGet: {path: /health, port: 8003}
+            failureThreshold: 30
+            periodSeconds: 5
+          readinessProbe:
+            httpGet: {path: /ready, port: 8003}
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: {path: /health, port: 8003}
+            periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-service
+  namespace: order-sre
+spec:
+  selector:
+    app: order-service
+  ports:
+    - port: 8003
+      targetPort: 8003
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-service
+  namespace: order-sre
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: payment-service
+  template:
+    metadata:
+      labels:
+        app: payment-service
+    spec:
+      serviceAccountName: order-app
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: payment-service
+          image: REPLACE_ACR/order-management/payment-service:1.0.0
+          ports:
+            - containerPort: 8004
+          envFrom:
+            - configMapRef:
+                name: order-sre-config
+          env:
+            - name: SERVICE_NAME
+              value: "payment-service"
+            - name: DATABASE_URL
+              value: "postgresql://orders:change-me-demo@postgres:5432/order_management"
+            - name: JWT_SECRET
+              value: "replace-with-secret-manager"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          startupProbe:
+            httpGet: {path: /health, port: 8004}
+            failureThreshold: 30
+            periodSeconds: 5
+          readinessProbe:
+            httpGet: {path: /ready, port: 8004}
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: {path: /health, port: 8004}
+            periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment-service
+  namespace: order-sre
+spec:
+  selector:
+    app: payment-service
+  ports:
+    - port: 8004
+      targetPort: 8004
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification-service
+  namespace: order-sre
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: notification-service
+  template:
+    metadata:
+      labels:
+        app: notification-service
+    spec:
+      serviceAccountName: order-app
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: notification-service
+          image: REPLACE_ACR/order-management/notification-service:1.0.0
+          ports:
+            - containerPort: 8005
+          envFrom:
+            - configMapRef:
+                name: order-sre-config
+          env:
+            - name: SERVICE_NAME
+              value: "notification-service"
+            - name: DATABASE_URL
+              value: "postgresql://orders:change-me-demo@postgres:5432/order_management"
+            - name: JWT_SECRET
+              value: "replace-with-secret-manager"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          startupProbe:
+            httpGet: {path: /health, port: 8005}
+            failureThreshold: 30
+            periodSeconds: 5
+          readinessProbe:
+            httpGet: {path: /ready, port: 8005}
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: {path: /health, port: 8005}
+            periodSeconds: 20
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notification-service
+  namespace: order-sre
+spec:
+  selector:
+    app: notification-service
+  ports:
+    - port: 8005
+      targetPort: 8005

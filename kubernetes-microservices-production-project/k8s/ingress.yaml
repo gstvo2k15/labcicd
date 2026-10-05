@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: food-delivery
+  namespace: food-delivery
+  annotations: {nginx.ingress.kubernetes.io/proxy-body-size: 2m}
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: food.example.com
+    http:
+      paths:
+      - {path: /api, pathType: Prefix, backend: {service: {name: api-gateway, port: {number: 8000}}}}
+      - {path: /, pathType: Prefix, backend: {service: {name: frontend, port: {number: 8080}}}}

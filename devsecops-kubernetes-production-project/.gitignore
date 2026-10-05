@@ -1,0 +1,16 @@
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+.terraform/
+*.tfstate
+*.tfstate.*
+coverage.xml
+htmlcov/
+node_modules/
+dist/
+__pycache__/
+.pytest_cache/
+.DS_Store

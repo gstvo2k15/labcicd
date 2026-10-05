@@ -1,0 +1,16 @@
+sequenceDiagram
+  participant D as Developer
+  participant B as Backstage
+  participant G as GitHub
+  participant C as CI
+  participant A as ACR
+  participant R as GitOps
+  participant Argo as Argo CD
+  participant K as AKS
+  D->>B: Select Golden Path
+  B->>G: Generate repository
+  G->>C: PR/push
+  C->>A: Push immutable image
+  C->>R: Update desired state
+  R->>Argo: Git change
+  Argo->>K: Reconcile

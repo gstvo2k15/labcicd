@@ -1,0 +1,195 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: order_management
+      POSTGRES_USER: orders
+      POSTGRES_PASSWORD: change-me-local
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U orders -d order_management"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    volumes: [redisdata:/data]
+    healthcheck:
+      test: ["CMD","redis-cli","ping"]
+      interval: 5s
+      timeout: 2s
+      retries: 10
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: app/api-gateway/Dockerfile
+    environment:
+      SERVICE_NAME: api-gateway
+      ENVIRONMENT: local
+      DATABASE_URL: postgresql://orders:change-me-local@postgres:5432/order_management
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: local-only-change-me
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+
+  user-service:
+    build:
+      context: .
+      dockerfile: app/user-service/Dockerfile
+    environment:
+      SERVICE_NAME: user-service
+      ENVIRONMENT: local
+      DATABASE_URL: postgresql://orders:change-me-local@postgres:5432/order_management
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: local-only-change-me
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8001:8001"
+
+  restaurant-service:
+    build:
+      context: .
+      dockerfile: app/restaurant-service/Dockerfile
+    environment:
+      SERVICE_NAME: restaurant-service
+      ENVIRONMENT: local
+      DATABASE_URL: postgresql://orders:change-me-local@postgres:5432/order_management
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: local-only-change-me
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8002:8002"
+
+  order-service:
+    build:
+      context: .
+      dockerfile: app/order-service/Dockerfile
+    environment:
+      SERVICE_NAME: order-service
+      ENVIRONMENT: local
+      DATABASE_URL: postgresql://orders:change-me-local@postgres:5432/order_management
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: local-only-change-me
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8003:8003"
+
+  payment-service:
+    build:
+      context: .
+      dockerfile: app/payment-service/Dockerfile
+    environment:
+      SERVICE_NAME: payment-service
+      ENVIRONMENT: local
+      DATABASE_URL: postgresql://orders:change-me-local@postgres:5432/order_management
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: local-only-change-me
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8004:8004"
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: app/notification-service/Dockerfile
+    environment:
+      SERVICE_NAME: notification-service
+      ENVIRONMENT: local
+      DATABASE_URL: postgresql://orders:change-me-local@postgres:5432/order_management
+      REDIS_URL: redis://redis:6379/0
+      JWT_SECRET: local-only-change-me
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8005:8005"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: app/frontend/Dockerfile
+    depends_on: [api-gateway]
+    ports: ["8080:8080"]
+
+  prometheus:
+    image: prom/prometheus:v2.55.1
+    volumes:
+      - ./observability/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./observability/prometheus/rules.yml:/etc/prometheus/rules.yml:ro
+    ports: ["9090:9090"]
+
+  grafana:
+    image: grafana/grafana:11.4.0
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+    volumes:
+      - grafanadata:/var/lib/grafana
+      - ./observability/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./observability/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    ports: ["3000:3000"]
+
+  loki:
+    image: grafana/loki:3.3.2
+    command: ["-config.file=/etc/loki/config.yml"]
+    volumes: [./observability/loki/config.yml:/etc/loki/config.yml:ro]
+    ports: ["3100:3100"]
+
+  tempo:
+    image: grafana/tempo:2.6.1
+    command: ["-config.file=/etc/tempo/config.yml"]
+    volumes: [./observability/tempo/config.yml:/etc/tempo/config.yml:ro]
+    ports: ["3200:3200","4317:4317","4318:4318"]
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.115.1
+    command: ["--config=/etc/otelcol/config.yml"]
+    volumes: [./observability/opentelemetry/collector.yml:/etc/otelcol/config.yml:ro]
+    ports: ["13133:13133","4317:4317","4318:4318"]
+    depends_on: [tempo]
+
+  alertmanager:
+    image: prom/alertmanager:v0.27.0
+    command: ["--config.file=/etc/alertmanager/alertmanager.yml"]
+    volumes: [./observability/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro]
+    ports: ["9093:9093"]
+
+volumes:
+  pgdata:
+  redisdata:
+  grafanadata:

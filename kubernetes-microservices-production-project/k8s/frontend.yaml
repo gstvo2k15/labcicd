@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: frontend, namespace: food-delivery}
+spec:
+  replicas: 3
+  strategy: {type: RollingUpdate, rollingUpdate: {maxUnavailable: 0, maxSurge: 1}}
+  selector: {matchLabels: {app: frontend}}
+  template:
+    metadata: {labels: {app: frontend}}
+    spec:
+      serviceAccountName: food-app
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm: {topologyKey: kubernetes.io/hostname, labelSelector: {matchLabels: {app: frontend}}}
+      securityContext: {runAsNonRoot: true, seccompProfile: {type: RuntimeDefault}}
+      containers:
+      - name: frontend
+        image: YOUR_ACR.azurecr.io/food-frontend:1.0.0
+        imagePullPolicy: IfNotPresent
+        ports: [{containerPort: 8080}]
+        env: [{name: VITE_API_BASE, value: /api}]
+        securityContext: {allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
+        resources: {requests: {cpu: 100m, memory: 128Mi}, limits: {cpu: 500m, memory: 512Mi}}
+        startupProbe: {httpGet: {path: /health, port: 8080}, failureThreshold: 30, periodSeconds: 5}
+        readinessProbe: {httpGet: {path: /health, port: 8080}, initialDelaySeconds: 5, periodSeconds: 10}
+        livenessProbe: {httpGet: {path: /health, port: 8080}, initialDelaySeconds: 20, periodSeconds: 20}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: frontend, namespace: food-delivery}
+spec: {selector: {app: frontend}, ports: [{port: 8080, targetPort: 8080}]}

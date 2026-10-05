@@ -1,0 +1,6 @@
+rules:
+- id: python-dangerous-eval
+  languages: [python]
+  message: Avoid eval in application code.
+  severity: ERROR
+  patterns: [{pattern: eval(...)}]

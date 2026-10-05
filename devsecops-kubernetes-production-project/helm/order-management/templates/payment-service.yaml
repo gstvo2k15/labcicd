@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: { { include "order-management.fullname" . } }-payment-service}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy: {type: RollingUpdate,rollingUpdate: {maxUnavailable: 0,maxSurge: 1}}
+  selector: {matchLabels: {app: payment-service}}
+  template:
+    metadata: {labels: {app: payment-service}}
+    spec:
+      containers:
+      - name: payment-service
+        image: "{{ .Values.registry }}/payment-service:{{ .Values.imageTag }}"
+        ports: [{{ toYaml (list (dict "containerPort" 8004)) | nindent 8 }}]
+        resources: {{ toYaml .Values.resources | nindent 10 }}
+        securityContext: {runAsNonRoot: true,allowPrivilegeEscalation: false,capabilities: {drop: [ALL]}}
+        readinessProbe: {httpGet: {path: /ready,port: 8004},periodSeconds: 10}
+        livenessProbe: {httpGet: {path: /health,port: 8004},periodSeconds: 20}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: payment-service}
+spec: {selector: {app: payment-service},ports: [{port: 8004,targetPort: 8004}]}

@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: order-management
+  namespace: order-management
+  annotations: {nginx.ingress.kubernetes.io/ssl-redirect: "true"}
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: order-management.example.com
+    http:
+      paths:
+      - path: /api
+        pathType: Prefix
+        backend: {service: {name: api-gateway,port: {number: 8000}}}
+      - path: /
+        pathType: Prefix
+        backend: {service: {name: frontend,port: {number: 8080}}}

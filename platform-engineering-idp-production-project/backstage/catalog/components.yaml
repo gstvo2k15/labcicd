@@ -1,0 +1,21 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: order-service
+  description: Order management service
+spec:
+  type: service
+  lifecycle: production
+  owner: group:orders-team
+  system: order-management
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: platform-api
+  description: Platform automation API
+spec:
+  type: service
+  lifecycle: production
+  owner: group:platform-team
+  system: internal-developer-platform

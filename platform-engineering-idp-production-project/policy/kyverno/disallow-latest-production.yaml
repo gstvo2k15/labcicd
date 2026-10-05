@@ -1,0 +1,18 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata: {name: disallow-latest-production}
+spec:
+  validationFailureAction: Enforce
+  rules:
+    - name: no-latest
+      match: {any: [{resources: {kinds: [Deployment], namespaces: [production]}}]}
+      validate:
+        message: Production must use immutable image references.
+        foreach:
+          - list: request.object.spec.template.spec.containers[]
+            deny:
+              conditions:
+                any:
+                  - key: "{{ element.image }}"
+                    operator: EndsWith
+                    value: ":latest"

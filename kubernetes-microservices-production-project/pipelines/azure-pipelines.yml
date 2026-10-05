@@ -1,0 +1,39 @@
+trigger:
+- main
+variables:
+  registry: 'YOUR_ACR.azurecr.io'
+  tag: '$(Build.SourceVersion)'
+stages:
+- stage: Test
+  jobs:
+  - job: UnitTests
+    steps:
+    - script: python -m compileall app
+      displayName: Validate Python source
+- stage: BuildScanPush
+  dependsOn: Test
+  jobs:
+  - job: Images
+    strategy:
+      matrix:
+        gateway: {service: api-gateway}
+        users: {service: user-service}
+        restaurants: {service: restaurant-service}
+        orders: {service: order-service}
+        payments: {service: payment-service}
+        notifications: {service: notification-service}
+        frontend: {service: frontend}
+    steps:
+    - script: docker build -t $(registry)/food-$(service):$(tag) app/$(service)
+    - script: trivy image --severity HIGH,CRITICAL --ignore-unfixed $(registry)/food-$(service):$(tag)
+    - task: Docker@2
+      inputs: {command: push, repository: '$(registry)/food-$(service)', tags: '$(tag)'}
+- stage: Deploy
+  dependsOn: BuildScanPush
+  jobs:
+  - job: AKS
+    steps:
+    - script: az aks get-credentials -g $(RESOURCE_GROUP) -n $(AKS_NAME) --overwrite-existing
+    - script: kubectl -n food-delivery set image deployment/$(SERVICE_NAME) $(SERVICE_NAME)=$(registry)/food-$(SERVICE_NAME):$(tag)
+    - script: kubectl -n food-delivery rollout status deployment/$(SERVICE_NAME) --timeout=5m
+    - script: kubectl -n food-delivery get pods

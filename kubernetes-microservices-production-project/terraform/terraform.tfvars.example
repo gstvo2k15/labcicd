@@ -1,0 +1,6 @@
+location = "Central India"
+resource_group_name = "rg-food-delivery-prod"
+aks_name = "aks-food-delivery"
+acr_name = "fooddeliveryacr12345"
+node_count = 2
+node_vm_size = "Standard_D4s_v5"

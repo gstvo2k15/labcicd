@@ -1,0 +1,16 @@
+{
+  "rules": [
+    {
+      "rulePriority": 1,
+      "description": "Keep the newest 20 commit-SHA images",
+      "selection": { "tagStatus": "tagged", "tagPrefixList": ["sha-"], "countType": "imageCountMoreThan", "countNumber": 20 },
+      "action": { "type": "expire" }
+    },
+    {
+      "rulePriority": 2,
+      "description": "Remove old untagged images",
+      "selection": { "tagStatus": "untagged", "countType": "imageCountMoreThan", "countNumber": 5 },
+      "action": { "type": "expire" }
+    }
+  ]
+}

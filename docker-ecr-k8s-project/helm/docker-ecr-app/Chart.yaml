@@ -1,0 +1,6 @@
+apiVersion: v2
+name: docker-ecr-app
+description: Real-time Docker to Amazon ECR to Kubernetes application
+version: 0.1.0
+appVersion: "1.0.0"
+type: application

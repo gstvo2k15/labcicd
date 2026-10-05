@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: order-sre
+resources:
+  - ../../../k8s/namespace.yaml
+  - ../../../k8s/configmap.yaml
+  - ../../../k8s/serviceaccounts.yaml
+  - ../../../k8s/rbac.yaml
+  - ../../../k8s/networkpolicies.yaml
+  - ../../../k8s/postgres.yaml
+  - ../../../k8s/redis.yaml
+  - ../../../k8s/app.yaml
+  - ../../../k8s/hpa.yaml
+  - ../../../k8s/pdb.yaml
+  - ../../../k8s/ingress.yaml

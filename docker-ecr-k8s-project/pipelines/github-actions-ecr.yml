@@ -1,0 +1,37 @@
+name: docker-to-ecr
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-scan-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      # Configure AWS credentials with GitHub OIDC in the repository settings.
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-east-1
+          role-to-assume: ${{ secrets.AWS_GITHUB_ROLE_ARN }}
+      - id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+      - name: Build
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          SHA: ${{ github.sha }}
+        run: |
+          docker build -f app/backend/Dockerfile -t $REGISTRY/k8s-docker-ecr/backend:sha-${SHA::12} app/backend
+          docker build -f app/frontend/Dockerfile -t $REGISTRY/k8s-docker-ecr/frontend:sha-${SHA::12} .
+      - name: Scan with Trivy
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: ${{ steps.login-ecr.outputs.registry }}/k8s-docker-ecr/backend:sha-${{ github.sha }}
+          severity: HIGH,CRITICAL
+          exit-code: '1'
+      - name: Push
+        run: |
+          docker push ${{ steps.login-ecr.outputs.registry }}/k8s-docker-ecr/backend:sha-${GITHUB_SHA::12}
+          docker push ${{ steps.login-ecr.outputs.registry }}/k8s-docker-ecr/frontend:sha-${GITHUB_SHA::12}

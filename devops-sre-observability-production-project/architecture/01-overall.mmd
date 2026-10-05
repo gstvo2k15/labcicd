@@ -1,0 +1,12 @@
+flowchart LR
+Developer --> GitHub --> CI --> ACR --> GitOps --> ArgoCD --> AKS
+AKS --> Gateway --> Microservices --> Postgres
+Microservices --> Redis
+Microservices --> OTel
+OTel --> Prometheus
+OTel --> Loki
+OTel --> Tempo
+Prometheus --> Grafana
+Loki --> Grafana
+Tempo --> Grafana
+Prometheus --> Alertmanager

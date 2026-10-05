@@ -1,0 +1,13 @@
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata: {name: order-api}
+spec:
+  type: openapi
+  lifecycle: production
+  owner: group:orders-team
+  definition: |
+    openapi: 3.0.3
+    info: {title: Order API, version: 1.0.0}
+    paths:
+      /health:
+        get: {responses: {"200": {description: Healthy}}}

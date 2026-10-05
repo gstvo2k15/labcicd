@@ -1,0 +1,16 @@
+namespace: k8s-ecr-app
+registry: AWS_ACCOUNT_ID.dkr.ecr.AWS_REGION.amazonaws.com/k8s-docker-ecr
+imagePullSecret: ecr-registry-secret
+backend:
+  repository: backend
+  tag: "1.0.0"
+  replicas: 3
+  port: 8000
+frontend:
+  repository: frontend
+  tag: "1.0.0"
+  replicas: 3
+  port: 8080
+resources:
+  backend: { requests: { cpu: 100m, memory: 128Mi }, limits: { cpu: 500m, memory: 512Mi } }
+  frontend: { requests: { cpu: 100m, memory: 64Mi }, limits: { cpu: 300m, memory: 256Mi } }

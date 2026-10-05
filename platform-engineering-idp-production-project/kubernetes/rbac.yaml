@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata: {name: developer, namespace: dev}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata: {name: developer-readwrite, namespace: dev}
+rules:
+  - apiGroups: ["", "apps"]
+    resources: [pods, services, configmaps, deployments, replicasets]
+    verbs: [get, list, watch, create, update, patch, delete]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata: {name: developer-readwrite, namespace: dev}
+subjects: [{kind: ServiceAccount, name: developer, namespace: dev}]
+roleRef: {kind: Role, name: developer-readwrite, apiGroup: rbac.authorization.k8s.io}

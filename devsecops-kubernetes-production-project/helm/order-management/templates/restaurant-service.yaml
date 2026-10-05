@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: { { include "order-management.fullname" . } }-restaurant-service}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy: {type: RollingUpdate,rollingUpdate: {maxUnavailable: 0,maxSurge: 1}}
+  selector: {matchLabels: {app: restaurant-service}}
+  template:
+    metadata: {labels: {app: restaurant-service}}
+    spec:
+      containers:
+      - name: restaurant-service
+        image: "{{ .Values.registry }}/restaurant-service:{{ .Values.imageTag }}"
+        ports: [{{ toYaml (list (dict "containerPort" 8002)) | nindent 8 }}]
+        resources: {{ toYaml .Values.resources | nindent 10 }}
+        securityContext: {runAsNonRoot: true,allowPrivilegeEscalation: false,capabilities: {drop: [ALL]}}
+        readinessProbe: {httpGet: {path: /ready,port: 8002},periodSeconds: 10}
+        livenessProbe: {httpGet: {path: /health,port: 8002},periodSeconds: 20}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: restaurant-service}
+spec: {selector: {app: restaurant-service},ports: [{port: 8002,targetPort: 8002}]}

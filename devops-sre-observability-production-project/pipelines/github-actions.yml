@@ -1,0 +1,24 @@
+name: devops-sre-ci
+on: [push, pull_request]
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with: {python-version: "3.12"}
+    - run: pip install pytest ruff pip-audit
+    - run: pytest app --ignore=app/frontend -q
+    - run: ruff check app
+    - uses: returntocorp/semgrep-action@v1
+      with: {config: p/python}
+    - uses: gitleaks/gitleaks-action@v2
+      env: {GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"}
+    - uses: anchore/scan-action@v6
+      with: {path: ".", fail-build: true, severity-cutoff: high}
+    - uses: anchore/sbom-action@v0
+      with: {path: ".", format: spdx-json, output-file: sbom.spdx.json}
+    - uses: actions/upload-artifact@v4
+      with: {name: sbom, path: sbom.spdx.json}

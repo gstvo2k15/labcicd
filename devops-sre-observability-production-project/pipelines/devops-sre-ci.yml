@@ -1,0 +1,28 @@
+trigger: [main]
+pr: [main]
+pool: {vmImage: ubuntu-latest}
+steps:
+- checkout: self
+- task: UsePythonVersion@0
+  inputs: {versionSpec: "3.12"}
+- script: |
+    python -m pip install -U pip
+    pip install pytest ruff pip-audit
+    pytest app --ignore=app/frontend -q
+    ruff check app
+  displayName: Unit tests and lint
+- script: |
+    docker run --rm -v "$(Build.SourcesDirectory):/src" semgrep/semgrep       semgrep --config p/python /src/app
+  displayName: SAST
+- script: |
+    docker run --rm -v "$(Build.SourcesDirectory):/repo" zricethezav/gitleaks:latest       detect --source=/repo --no-banner
+  displayName: Secret scan
+- script: |
+    docker build -t order-sre-api-gateway:$(Build.SourceVersion)       -f app/api-gateway/Dockerfile .
+    docker run --rm -v /var/run/docker.sock:/var/run/docker.sock       aquasec/trivy:0.57.1 image --severity HIGH,CRITICAL       --exit-code 1 order-sre-api-gateway:$(Build.SourceVersion)
+  displayName: Trivy
+- script: |
+    docker run --rm -v "$(Build.SourcesDirectory):/src" anchore/syft:latest       dir:/src -o spdx-json=/src/sbom.spdx.json
+  displayName: SBOM
+- publish: sbom.spdx.json
+  artifact: sbom

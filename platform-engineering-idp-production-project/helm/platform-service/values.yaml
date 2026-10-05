@@ -1,0 +1,20 @@
+image:
+  repository: nginx
+  tag: "1.27-alpine"
+  pullPolicy: IfNotPresent
+replicaCount: 2
+service:
+  port: 80
+  targetPort: 80
+resources:
+  requests: {cpu: 100m, memory: 128Mi}
+  limits: {cpu: 500m, memory: 256Mi}
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 70
+labels:
+  team: platform-team
+  environment: dev
+  costCenter: engineering

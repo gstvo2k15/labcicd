@@ -1,0 +1,21 @@
+flowchart TD
+ U[User] --> I[Internet]
+ I --> ING[Ingress / AKS]
+ ING --> F[React Frontend]
+ ING --> G[API Gateway]
+ G --> US[User Service]
+ G --> RS[Restaurant Service]
+ G --> OS[Order Service]
+ G --> PS[Payment Service]
+ G --> NS[Notification Service]
+ US --> PG[(PostgreSQL)]
+ RS --> PG
+ OS --> PG
+ PS --> PG
+ NS --> PG
+ OS --> R[(Redis)]
+ US --> R
+ RS --> R
+ NS --> R
+ CI[CI/CD] --> ACR[Azure Container Registry]
+ ACR --> AKS[AKS Cluster]

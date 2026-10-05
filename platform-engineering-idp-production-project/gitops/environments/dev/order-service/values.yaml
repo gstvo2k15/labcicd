@@ -1,0 +1,3 @@
+image: {repository: example.azurecr.io/platform/order-service, tag: "1.0.0"}
+replicaCount: 1
+labels: {team: orders-team, environment: dev, costCenter: engineering}

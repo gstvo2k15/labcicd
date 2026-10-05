@@ -1,0 +1,5 @@
+location="centralindia"
+prefix="devsecopsom"
+resource_group_name="rg-devsecops-order"
+node_count=2
+node_vm_size="Standard_D4s_v5"

@@ -1,0 +1,13 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata: {name: require-resources}
+spec:
+  validationFailureAction: Audit
+  rules:
+    - name: resources-required
+      match: {any: [{resources: {kinds: [Deployment]}}]}
+      validate:
+        message: Container requests and limits are required.
+        foreach:
+          - list: request.object.spec.template.spec.containers[]
+            pattern: {resources: {requests: {cpu: "?*", memory: "?*"}, limits: {cpu: "?*", memory: "?*"}}}

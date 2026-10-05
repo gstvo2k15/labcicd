@@ -1,0 +1,16 @@
+name: build-scan-deploy
+on: {push: {branches: [main]}}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions: {id-token: write, contents: read}
+    strategy: {matrix: {service: [api-gateway,user-service,restaurant-service,order-service,payment-service,notification-service,frontend]}}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: azure/login@v2
+      with: {client-id: ${{ secrets.AZURE_CLIENT_ID }}, tenant-id: ${{ secrets.AZURE_TENANT_ID }}, subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}}
+    - run: az acr login --name ${{ secrets.ACR_NAME }}
+    - run: docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/food-${{ matrix.service }}:${{ github.sha }} app/${{ matrix.service }}
+    - uses: aquasecurity/trivy-action@0.28.0
+      with: {image-ref: '${{ secrets.ACR_LOGIN_SERVER }}/food-${{ matrix.service }}:${{ github.sha }}', severity: 'HIGH,CRITICAL', ignore-unfixed: true}
+    - run: docker push ${{ secrets.ACR_LOGIN_SERVER }}/food-${{ matrix.service }}:${{ github.sha }}

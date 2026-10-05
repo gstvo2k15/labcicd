@@ -1,0 +1,20 @@
+namespace: order-sre
+registry: REPLACE_ACR.azurecr.io/order-management
+tag: "1.0.0"
+replicas: 2
+resources:
+  requests: {cpu: 100m, memory: 128Mi}
+  limits: {cpu: 500m, memory: 512Mi}
+hpa:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  cpu: 70
+  memory: 75
+services:
+  api-gateway: 8000
+  user-service: 8001
+  restaurant-service: 8002
+  order-service: 8003
+  payment-service: 8004
+  notification-service: 8005

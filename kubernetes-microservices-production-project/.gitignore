@@ -1,0 +1,11 @@
+.env
+*.tfstate
+*.tfstate.*
+.terraform/
+terraform.tfvars
+k8s/secret.local.yaml
+backups/
+node_modules/
+dist/
+__pycache__/
+*.pyc

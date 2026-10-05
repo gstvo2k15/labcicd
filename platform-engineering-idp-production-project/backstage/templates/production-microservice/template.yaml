@@ -1,0 +1,30 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: production-microservice
+  title: Production Microservice Golden Path
+  description: Standard service with code, tests, Docker, CI and catalog metadata
+spec:
+  owner: group:platform-team
+  type: service
+  parameters:
+    - title: Service information
+      required: [name, owner, environment]
+      properties:
+        name: {title: Service name, type: string, pattern: '^[a-z0-9-]+$'}
+        owner: {title: Owner, type: string, default: orders-team}
+        environment: {title: Environment, type: string, enum: [dev, staging, production], default: dev}
+  steps:
+    - id: fetch
+      name: Fetch skeleton
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          name: ${{ parameters.name }}
+          owner: ${{ parameters.owner }}
+          environment: ${{ parameters.environment }}
+  output:
+    text:
+      - title: Next step
+        content: Generated service files are ready for publication through your configured GitHub integration.

@@ -1,0 +1,9 @@
+services:
+  platform-api:
+    build: ./platform-api
+    ports: ["8080:8080"]
+    restart: unless-stopped
+  order-service:
+    build: ./app/order-service
+    ports: ["8081:8080"]
+    restart: unless-stopped

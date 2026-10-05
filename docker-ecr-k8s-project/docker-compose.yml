@@ -1,0 +1,17 @@
+services:
+  backend:
+    build: { context: ./app/backend, dockerfile: Dockerfile }
+    image: k8s-docker-ecr/backend:local
+    environment: { APP_ENV: compose, APP_VERSION: 1.0.0 }
+    ports: ["8000:8000"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+  frontend:
+    build: { context: ./app/frontend, dockerfile: Dockerfile }
+    image: k8s-docker-ecr/frontend:local
+    depends_on:
+      backend: { condition: service_healthy }
+    ports: ["8080:8080"]

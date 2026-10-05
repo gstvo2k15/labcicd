@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: order-management
+resources:
+- ../../base
+images:
+- name: ACR_NAME.azurecr.io/order-management/frontend
+  newTag: sha-PRODUCTION
+- name: ACR_NAME.azurecr.io/order-management/api-gateway
+  newTag: sha-PRODUCTION
+- name: ACR_NAME.azurecr.io/order-management/user-service
+  newTag: sha-PRODUCTION
+- name: ACR_NAME.azurecr.io/order-management/restaurant-service
+  newTag: sha-PRODUCTION
+- name: ACR_NAME.azurecr.io/order-management/order-service
+  newTag: sha-PRODUCTION
+- name: ACR_NAME.azurecr.io/order-management/payment-service
+  newTag: sha-PRODUCTION
+- name: ACR_NAME.azurecr.io/order-management/notification-service
+  newTag: sha-PRODUCTION

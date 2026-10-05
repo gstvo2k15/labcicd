@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: order-service, namespace: food-delivery}
+spec:
+  replicas: 3
+  strategy: {type: RollingUpdate, rollingUpdate: {maxUnavailable: 0, maxSurge: 1}}
+  selector: {matchLabels: {app: order-service}}
+  template:
+    metadata: {labels: {app: order-service}}
+    spec:
+      serviceAccountName: food-app
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm: {topologyKey: kubernetes.io/hostname, labelSelector: {matchLabels: {app: order-service}}}
+      securityContext: {runAsNonRoot: true, seccompProfile: {type: RuntimeDefault}}
+      containers:
+      - name: order-service
+        image: YOUR_ACR.azurecr.io/food-order-service:1.0.0
+        imagePullPolicy: IfNotPresent
+        ports: [{containerPort: 8000}]
+        envFrom:
+        - configMapRef: {name: food-config}
+        - secretRef: {name: food-secrets}
+        securityContext: {allowPrivilegeEscalation: false, capabilities: {drop: [ALL]}}
+        resources: {requests: {cpu: 100m, memory: 128Mi}, limits: {cpu: 500m, memory: 512Mi}}
+        startupProbe: {httpGet: {path: /health, port: 8000}, failureThreshold: 30, periodSeconds: 5}
+        readinessProbe: {httpGet: {path: /health, port: 8000}, initialDelaySeconds: 5, periodSeconds: 10}
+        livenessProbe: {httpGet: {path: /health, port: 8000}, initialDelaySeconds: 20, periodSeconds: 20}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: order-service, namespace: food-delivery}
+spec: {selector: {app: order-service}, ports: [{port: 8000, targetPort: 8000}]}

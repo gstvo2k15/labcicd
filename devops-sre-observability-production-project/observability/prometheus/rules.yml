@@ -1,0 +1,28 @@
+groups:
+- name: order-sre
+  rules:
+  - record: service:http_requests_per_second
+    expr: sum by (job)(rate(http_requests_total[5m]))
+  - record: service:http_5xx_ratio
+    expr: sum by (job)(rate(http_requests_total{status=~"5.."}[5m]))
+      / clamp_min(sum by (job)(rate(http_requests_total[5m])), 1)
+  - alert: HighErrorRate
+    expr: service:http_5xx_ratio > 0.05
+    for: 5m
+    labels: {severity: critical}
+    annotations:
+      summary: "HTTP 5xx rate is above 5%"
+      runbook: "runbooks/api-high-errors.md"
+  - alert: HighLatency
+    expr: histogram_quantile(0.99, sum by (le,job)(rate(http_request_duration_seconds_bucket[5m]))) > 0.5
+    for: 5m
+    labels: {severity: warning}
+    annotations:
+      summary: "p99 API latency is above 500ms"
+      runbook: "runbooks/api-high-latency.md"
+  - alert: TargetDown
+    expr: up == 0
+    for: 2m
+    labels: {severity: critical}
+    annotations:
+      summary: "Prometheus target is down"

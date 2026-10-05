@@ -1,0 +1,26 @@
+name: devsecops
+on: [push,pull_request]
+permissions: {contents: read,id-token: write,packages: write}
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with: {python-version: '3.12'}
+    - run: pip install semgrep pip-audit pytest
+    - run: semgrep scan --config security/sast/.semgrep.yml app/
+    - run: for f in app/*/requirements.txt; do pip-audit -r "$f" --strict; done
+    - uses: gitleaks/gitleaks-action@v2
+    - run: pip install -r app/user-service/requirements.txt && pytest app/*/tests -q
+  build_scan_sbom:
+    needs: security
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: aquasecurity/trivy-action@master
+      with: {image-ref: 'python:3.12-slim', severity: 'HIGH,CRITICAL', exit-code: '1'}
+    - uses: anchore/sbom-action@v0
+      with: {path: '.', format: cyclonedx-json, output-file: sbom.json}
+    - uses: actions/upload-artifact@v4
+      with: {name: sbom, path: sbom.json}

@@ -1,0 +1,13 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: insecure-example, namespace: dev}
+spec:
+  replicas: 1
+  selector: {matchLabels: {app: insecure-example}}
+  template:
+    metadata: {labels: {app: insecure-example}}
+    spec:
+      containers:
+        - name: app
+          image: nginx:latest
+          securityContext: {privileged: true}

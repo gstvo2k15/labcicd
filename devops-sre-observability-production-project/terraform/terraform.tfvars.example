@@ -1,0 +1,4 @@
+location = "Central India"
+project = "order-sre"
+node_count = 2
+node_vm_size = "Standard_D4s_v5"
