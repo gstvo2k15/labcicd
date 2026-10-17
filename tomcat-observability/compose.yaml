@@ -1,0 +1,184 @@
+name: tomcat-observability
+
+x-hardening: &hardening
+  restart: unless-stopped
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  logging:
+    driver: json-file
+    options:
+      max-size: 10m
+      max-file: "3"
+
+services:
+  init-volumes:
+    image: alpine:3.24.2
+    user: "0:0"
+    restart: "no"
+    network_mode: none
+    read_only: true
+    cap_drop: [ALL]
+    cap_add: [CHOWN, DAC_OVERRIDE]
+    security_opt: [no-new-privileges:true]
+    command:
+      - sh
+      - -ec
+      - chown 10001:10001 /logs /otel /loki /tempo && chown 65534:65534 /prometheus /alertmanager && chown 472:472 /grafana
+    volumes:
+      - tomcat-logs:/logs
+      - otel-data:/otel
+      - loki-data:/loki
+      - tempo-data:/tempo
+      - prometheus-data:/prometheus
+      - alertmanager-data:/alertmanager
+      - grafana-data:/grafana
+
+  tomcat:
+    <<: *hardening
+    image: lab/tomcat-alpine-jdk17:10.1.61
+    build: ./tomcat
+    read_only: true
+    ports: ["127.0.0.1:8080:8080"]
+    environment:
+      JAVA_TOOL_OPTIONS: -javaagent:/opt/agents/opentelemetry-javaagent.jar -XX:MaxRAMPercentage=70
+      OTEL_SERVICE_NAME: tomcat
+      OTEL_RESOURCE_ATTRIBUTES: deployment.environment.name=lab
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
+      OTEL_EXPORTER_OTLP_PROTOCOL: http/protobuf
+      OTEL_METRICS_EXPORTER: otlp
+      OTEL_TRACES_EXPORTER: otlp
+      OTEL_LOGS_EXPORTER: none
+      OTEL_METRIC_EXPORT_INTERVAL: "15000"
+    volumes: [tomcat-logs:/opt/tomcat/logs]
+    tmpfs:
+      - /tmp:uid=10001,gid=10001,mode=1770
+      - /opt/tomcat/temp:uid=10001,gid=10001
+      - /opt/tomcat/work:uid=10001,gid=10001
+    mem_limit: 768m
+    cpus: 1.0
+    depends_on: [otel-collector]
+
+  otel-collector:
+    <<: *hardening
+    image: otel/opentelemetry-collector-contrib:0.161.0
+    user: "10001:10001"
+    read_only: true
+    command: ["--config=/etc/otelcol/config.yaml"]
+    volumes:
+      - ./config/otel-collector.yaml:/etc/otelcol/config.yaml:ro
+      - tomcat-logs:/var/log/tomcat:ro
+      - otel-data:/var/lib/otelcol
+    mem_limit: 384m
+    cpus: 0.5
+    depends_on:
+      init-volumes:
+        condition: service_completed_successfully
+      loki:
+        condition: service_started
+      tempo:
+        condition: service_started
+
+  prometheus:
+    <<: *hardening
+    image: prom/prometheus:v3.5.0
+    user: "65534:65534"
+    read_only: true
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=7d
+    ports: ["127.0.0.1:9090:9090"]
+    volumes:
+      - ./config/prometheus.yaml:/etc/prometheus/prometheus.yml:ro
+      - ./config/alerts.yaml:/etc/prometheus/alerts.yaml:ro
+      - prometheus-data:/prometheus
+    mem_limit: 512m
+    cpus: 0.5
+    depends_on:
+      init-volumes:
+        condition: service_completed_successfully
+      otel-collector:
+        condition: service_started
+      alertmanager:
+        condition: service_started
+
+  alertmanager:
+    <<: *hardening
+    image: prom/alertmanager:v0.28.1
+    user: "65534:65534"
+    read_only: true
+    command: ["--config.file=/etc/alertmanager/alertmanager.yml", "--storage.path=/alertmanager"]
+    ports: ["127.0.0.1:9093:9093"]
+    volumes:
+      - ./config/alertmanager.yaml:/etc/alertmanager/alertmanager.yml:ro
+      - alertmanager-data:/alertmanager
+    mem_limit: 128m
+    cpus: 0.25
+    depends_on:
+      init-volumes:
+        condition: service_completed_successfully
+
+  loki:
+    <<: *hardening
+    image: grafana/loki:3.5.3
+    user: "10001:10001"
+    read_only: true
+    command: ["-config.file=/etc/loki/config.yaml"]
+    volumes:
+      - ./config/loki.yaml:/etc/loki/config.yaml:ro
+      - loki-data:/loki
+    mem_limit: 512m
+    cpus: 0.5
+    depends_on:
+      init-volumes:
+        condition: service_completed_successfully
+
+  tempo:
+    <<: *hardening
+    image: grafana/tempo:2.8.2
+    user: "10001:10001"
+    read_only: true
+    command: ["-config.file=/etc/tempo/config.yaml"]
+    volumes:
+      - ./config/tempo.yaml:/etc/tempo/config.yaml:ro
+      - tempo-data:/var/tempo
+    mem_limit: 384m
+    cpus: 0.5
+    depends_on:
+      init-volumes:
+        condition: service_completed_successfully
+
+  grafana:
+    <<: *hardening
+    image: grafana/grafana:12.1.1
+    user: "472:472"
+    read_only: true
+    ports: ["127.0.0.1:3000:3000"]
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/grafana_admin_password
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+    secrets: [grafana_admin_password]
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana-data:/var/lib/grafana
+    tmpfs: [/tmp]
+    mem_limit: 384m
+    cpus: 0.5
+    depends_on: [prometheus, loki, tempo]
+
+secrets:
+  grafana_admin_password:
+    file: ./secrets/grafana_admin_password.txt
+
+volumes:
+  tomcat-logs:
+  otel-data:
+  prometheus-data:
+  alertmanager-data:
+  loki-data:
+  tempo-data:
+  grafana-data:

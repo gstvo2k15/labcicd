@@ -1,0 +1,17 @@
+groups:
+  - name: availability
+    rules:
+      - alert: ObservabilityTargetDown
+        expr: up == 0
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: 'Scrape fallido: {{ $labels.job }} / {{ $labels.instance }}'
+      - alert: TomcatTelemetryMissing
+        expr: absent(jvm_memory_used_bytes{service_name="tomcat"})
+        for: 3m
+        labels:
+          severity: critical
+        annotations:
+          summary: Tomcat lleva tres minutos sin métricas JVM
