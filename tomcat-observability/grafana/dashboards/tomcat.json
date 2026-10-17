@@ -33,6 +33,157 @@
   ],
   "panels": [
     {
+      "id": 29,
+      "title": "Targets disponibles",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "up",
+          "legendFormat": "{{job}} / {{instance}}",
+          "range": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "min": 0,
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 1,
+            "fillOpacity": 10,
+            "showPoints": "never"
+          },
+          "max": 1
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      }
+    },
+    {
+      "id": 30,
+      "title": "Memoria JVM",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "expr": "jvm_memory_used_bytes{service_name=\"tomcat\"}",
+          "legendFormat": "{{jvm_memory_type}} / {{jvm_memory_pool_name}}",
+          "range": true
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "min": 0,
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 1,
+            "fillOpacity": 10,
+            "showPoints": "never"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "description": "JVM memory exported by the OpenTelemetry Java agent through Collector (job tomcat-otel). Independent of the JMX dashboard filters."
+    },
+    {
+      "id": 28,
+      "title": "Logs de Tomcat",
+      "description": "Tomcat access and JUL logs from Loki. Log search filters literal text. Job/Instance/Protocol select JMX metrics only; logs cover the single Tomcat service in this Compose.",
+      "type": "logs",
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "expr": "{service_name=\"tomcat\"} |~ `${log_search:regex}`",
+          "queryType": "range",
+          "editorMode": "code",
+          "maxLines": 1000
+        }
+      ],
+      "options": {
+        "showTime": true,
+        "showLabels": false,
+        "showCommonLabels": false,
+        "wrapLogMessage": true,
+        "prettifyLogMessage": false,
+        "enableLogDetails": true,
+        "sortOrder": "Descending",
+        "dedupStrategy": "none"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      }
+    },
+    {
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
@@ -41,7 +192,7 @@
         "h": 4,
         "w": 24,
         "x": 0,
-        "y": 0
+        "y": 20
       },
       "id": 27,
       "targets": [
@@ -86,49 +237,6 @@
       }
     },
     {
-      "id": 28,
-      "title": "Logs de Tomcat",
-      "description": "Tomcat access and JUL logs from Loki. Log search filters literal text. Job/Instance/Protocol select JMX metrics only; logs cover the single Tomcat service in this Compose.",
-      "type": "logs",
-      "datasource": {
-        "type": "loki",
-        "uid": "loki"
-      },
-      "gridPos": {
-        "h": 12,
-        "w": 24,
-        "x": 0,
-        "y": 4
-      },
-      "targets": [
-        {
-          "refId": "A",
-          "datasource": {
-            "type": "loki",
-            "uid": "loki"
-          },
-          "expr": "{service_name=\"tomcat\"} |~ `${log_search:regex}`",
-          "queryType": "range",
-          "editorMode": "code",
-          "maxLines": 1000
-        }
-      ],
-      "options": {
-        "showTime": true,
-        "showLabels": false,
-        "showCommonLabels": false,
-        "wrapLogMessage": true,
-        "prettifyLogMessage": false,
-        "enableLogDetails": true,
-        "sortOrder": "Descending",
-        "dedupStrategy": "none"
-      },
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      }
-    },
-    {
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
@@ -137,7 +245,7 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 16
+        "y": 24
       },
       "id": 2,
       "targets": [
@@ -205,7 +313,7 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 16
+        "y": 24
       },
       "id": 4,
       "targets": [
@@ -273,7 +381,7 @@
         "h": 9,
         "w": 20,
         "x": 0,
-        "y": 25
+        "y": 33
       },
       "id": 5,
       "targets": [
@@ -352,7 +460,7 @@
         "h": 3,
         "w": 4,
         "x": 20,
-        "y": 25
+        "y": 33
       },
       "id": 19,
       "targets": [
@@ -404,7 +512,7 @@
         "h": 3,
         "w": 4,
         "x": 20,
-        "y": 28
+        "y": 36
       },
       "id": 20,
       "targets": [
@@ -456,7 +564,7 @@
         "h": 3,
         "w": 4,
         "x": 20,
-        "y": 31
+        "y": 39
       },
       "id": 21,
       "targets": [
@@ -508,7 +616,7 @@
         "h": 4,
         "w": 4,
         "x": 2,
-        "y": 34
+        "y": 42
       },
       "id": 14,
       "targets": [
@@ -561,7 +669,7 @@
         "h": 4,
         "w": 4,
         "x": 6,
-        "y": 34
+        "y": 42
       },
       "id": 12,
       "targets": [
@@ -614,7 +722,7 @@
         "h": 4,
         "w": 4,
         "x": 10,
-        "y": 34
+        "y": 42
       },
       "id": 15,
       "targets": [
@@ -667,7 +775,7 @@
         "h": 4,
         "w": 4,
         "x": 14,
-        "y": 34
+        "y": 42
       },
       "id": 16,
       "targets": [
@@ -720,7 +828,7 @@
         "h": 4,
         "w": 4,
         "x": 18,
-        "y": 34
+        "y": 42
       },
       "id": 17,
       "targets": [
@@ -773,7 +881,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 38
+        "y": 46
       },
       "id": 10,
       "targets": [
@@ -863,7 +971,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 47
+        "y": 55
       },
       "id": 23,
       "targets": [
@@ -920,7 +1028,7 @@
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 56
+        "y": 64
       },
       "id": 25,
       "targets": [
@@ -977,7 +1085,7 @@
         "h": 6,
         "w": 24,
         "x": 0,
-        "y": 65
+        "y": 73
       },
       "id": 24,
       "targets": [
@@ -1040,7 +1148,8 @@
       {
         "current": {
           "text": "tomcat-jmx",
-          "value": "tomcat-jmx"
+          "value": "tomcat-jmx",
+          "selected": true
         },
         "hide": 0,
         "label": "Job",
@@ -1054,7 +1163,9 @@
         ],
         "query": "tomcat-jmx",
         "skipUrlSync": false,
-        "type": "constant"
+        "type": "custom",
+        "multi": false,
+        "includeAll": false
       },
       {
         "allValue": ".*",
@@ -1155,6 +1266,6 @@
   "timezone": "",
   "title": "Tomcat observability",
   "uid": "tomcat-observability",
-  "version": 3,
+  "version": 4,
   "description": "Based on Grafana.com dashboard 8704 revision 1. Adapted for Grafana 12 / Tomcat 10.1, with Loki logs."
 }

@@ -24,7 +24,7 @@ Collector Contrib incluye el receptor **filelog**, que es el agente de recogida 
 
 ## Dashboard Tomcat 8704 con logs
 
-**Tomcat observability** se basa en el [dashboard 8704, revisión 1](https://grafana.com/grafana/dashboards/8704-tomcat-dashboard/). Conserva sus 16 paneles de métricas e incorpora el panel de logs de Loki justo debajo de Server info: 17 paneles en total. No necesitas importarlo manualmente; se provisiona desde `grafana/dashboards/tomcat.json` con las fuentes ya configuradas. Usa el dashboard con UID `tomcat-observability`; importar el original 8704 por separado no incluye nuestras adaptaciones ni el panel de logs.
+**Tomcat observability** se basa en el [dashboard 8704, revisión 1](https://grafana.com/grafana/dashboards/8704-tomcat-dashboard/). Incluye los tres paneles de la captura `tomcat_screenshot-1.png` en la parte superior: Targets disponibles y Memoria JVM en la primera fila, seguidos de Logs de Tomcat a todo el ancho. Debajo conserva los 16 paneles de métricas del 8704: 19 paneles en total. No necesitas importarlo manualmente; se provisiona desde `grafana/dashboards/tomcat.json` con las fuentes ya configuradas. Usa el dashboard con UID `tomcat-observability`; importar el original 8704 por separado no incluye nuestras adaptaciones ni el panel de logs.
 
 Adaptaciones para este entorno:
 
@@ -33,6 +33,7 @@ Adaptaciones para este entorno:
 - Los contadores antiguos de acceptor/poller threads se sustituyen por connection timeout y max connections, atributos disponibles en el conector NIO de Tomcat 10.1.
 - Logs con hora visible, ajuste de línea, detalles expandibles, orden más reciente primero y hasta 1000 líneas por consulta. El campo **Log search (literal)** filtra el texto; vacío muestra todo. Los filtros Job/Instance/Protocol afectan a las métricas JMX; los logs corresponden al único servicio Tomcat de este Compose.
 - El enlace **Explore / Tempo** permite consultar trazas. Se conserva el UID `tomcat-observability`, por lo que tu enlace anterior al dashboard sigue funcionando.
+- El resumen superior no depende de los filtros JMX: muestra todos los targets y la memoria JVM de Tomcat recibida por OpenTelemetry. Así puedes comprobar esas rutas aunque fallen las métricas JMX.
 
 ### Actualizar una instalación existente en Linux
 
