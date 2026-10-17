@@ -2,6 +2,8 @@ FROM alpine:3.24.2 AS download
 ARG TOMCAT_VERSION=10.1.61
 ARG OTEL_VERSION=2.26.1
 ARG OTEL_SHA256=cc4af5966ab72109cacc962ba3b9f99b3e88caf064c3144a451bcfe0f4950f19
+ARG JMX_VERSION=1.6.0
+ARG JMX_SHA256=a95983fd96e865d2bcdf911cc500e7c82808c27ab9fd226bf96732b6c3d8c46e
 RUN apk add --no-cache ca-certificates curl tar \
     && mkdir -p /out/tomcat /out/agents \
     && curl -fsSL --retry 3 "https://archive.apache.org/dist/tomcat/tomcat-10/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz" -o /tmp/tomcat.tar.gz \
@@ -10,7 +12,9 @@ RUN apk add --no-cache ca-certificates curl tar \
     && tar -xzf /tmp/tomcat.tar.gz --strip-components=1 -C /out/tomcat \
     && rm -rf /out/tomcat/webapps/* \
     && curl -fsSL --retry 3 "https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v${OTEL_VERSION}/opentelemetry-javaagent.jar" -o /out/agents/opentelemetry-javaagent.jar \
-    && echo "${OTEL_SHA256}  /out/agents/opentelemetry-javaagent.jar" | sha256sum -c -
+    && echo "${OTEL_SHA256}  /out/agents/opentelemetry-javaagent.jar" | sha256sum -c - \
+    && curl -fsSL --retry 3 "https://github.com/prometheus/jmx_exporter/releases/download/${JMX_VERSION}/jmx_prometheus_javaagent-${JMX_VERSION}.jar" -o /out/agents/jmx_prometheus_javaagent.jar \
+    && echo "${JMX_SHA256}  /out/agents/jmx_prometheus_javaagent.jar" | sha256sum -c -
 # checkov:skip=CKV_DOCKER_2:Etapa de descarga; no ejecuta un servicio.
 # checkov:skip=CKV_DOCKER_3:Etapa de descarga; apk requiere root. La imagen final usa UID 10001.
 

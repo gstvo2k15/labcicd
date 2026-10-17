@@ -18,4 +18,14 @@ if ! jq -e '.status == "success" and (.data.activeTargets | length > 0) and all(
   exit 1
 fi
 
-echo 'HTTP y targets correctos. Tras 30 segundos, verificar métricas, logs y trazas en Grafana según README.'
+# Un scrape UP no garantiza que las reglas exporten los MBeans del dashboard.
+metrics="$(curl --fail --silent --show-error --max-time 10 --get \
+  --data-urlencode 'query=count by (__name__) ({job="tomcat-jmx",__name__=~"tomcat_serverinfo|tomcat_requestcount_total|tomcat_threadpool_maxthreads|tomcat_session_activesessions|tomcat_servlet_requestcount_total"})' \
+  http://localhost:9090/api/v1/query)"
+if ! jq -e '.status == "success" and (.data.result | length == 5)' <<< "$metrics" >/dev/null; then
+  echo 'Faltan familias de metricas JMX. Espera un scrape y revisa Tomcat y config/jmx-exporter.yaml.' >&2
+  jq '.data.result' <<< "$metrics" >&2
+  exit 1
+fi
+
+echo 'HTTP, targets y familias JMX correctos. Verifica logs y trazas en Grafana segun README.'

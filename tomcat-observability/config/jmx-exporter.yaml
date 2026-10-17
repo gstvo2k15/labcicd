@@ -1,0 +1,42 @@
+startDelaySeconds: 10
+lowercaseOutputName: true
+lowercaseOutputLabelNames: true
+includeObjectNames:
+  - "Catalina:*"
+rules:
+  - pattern: 'Catalina<type=Server><>serverInfo: (.+)'
+    name: tomcat_serverinfo
+    value: 1
+    labels:
+      serverInfo: "$1"
+    type: GAUGE
+  - pattern: 'Catalina<type=GlobalRequestProcessor, name="([^" ]+)-(\d+)"><>(bytesReceived|bytesSent|requestCount|errorCount|processingTime):'
+    name: tomcat_$3_total
+    labels:
+      protocol: "$1"
+      port: "$2"
+    type: COUNTER
+  - pattern: 'Catalina<j2eeType=Servlet, WebModule=//([^,]+), name=([^,]+), J2EEApplication=none, J2EEServer=none><>(requestCount|processingTime|errorCount):'
+    name: tomcat_servlet_$3_total
+    labels:
+      module: "$1"
+      servlet: "$2"
+    type: COUNTER
+  - pattern: 'Catalina<type=ThreadPool, name="([^" ]+)-(\d+)"><>(currentThreadCount|currentThreadsBusy|keepAliveCount|connectionCount|maxThreads|minSpareThreads|acceptCount|maxConnections|connectionTimeout):'
+    name: tomcat_threadpool_$3
+    labels:
+      protocol: "$1"
+      port: "$2"
+    type: GAUGE
+  - pattern: 'Catalina<type=Manager, host=([^,]+), context=([^>]+)><>(processingTime|sessionCounter|rejectedSessions|expiredSessions):'
+    name: tomcat_session_$3_total
+    labels:
+      host: "$1"
+      context: "$2"
+    type: COUNTER
+  - pattern: 'Catalina<type=Manager, host=([^,]+), context=([^>]+)><>activeSessions:'
+    name: tomcat_session_activesessions
+    labels:
+      host: "$1"
+      context: "$2"
+    type: GAUGE

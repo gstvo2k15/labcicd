@@ -1,18 +1,134 @@
 {
-  "uid": "tomcat-observability",
-  "title": "Tomcat observability",
-  "schemaVersion": 39,
-  "version": 1,
-  "refresh": "15s",
-  "time": {
-    "from": "now-15m",
-    "to": "now"
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
   },
+  "editable": true,
+  "gnetId": 8704,
+  "graphTooltip": 0,
+  "id": null,
+  "iteration": 1540866419839,
+  "links": [
+    {
+      "title": "Original dashboard 8704",
+      "type": "link",
+      "url": "https://grafana.com/grafana/dashboards/8704-tomcat-dashboard/",
+      "targetBlank": true
+    },
+    {
+      "title": "Explore / Tempo",
+      "type": "link",
+      "url": "/explore",
+      "targetBlank": false
+    }
+  ],
   "panels": [
     {
-      "id": 1,
-      "title": "Targets disponibles",
-      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 27,
+      "targets": [
+        {
+          "expr": "tomcat_serverinfo{job=\"$job\", instance=~\"$instance\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "instant": true,
+          "legendFormat": "{{serverinfo}} / {{instance}}"
+        }
+      ],
+      "title": "Server info",
+      "type": "stat",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "green"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "name",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "id": 28,
+      "title": "Logs de Tomcat",
+      "description": "Tomcat access and JUL logs from Loki. Log search filters literal text. Job/Instance/Protocol select JMX metrics only; logs cover the single Tomcat service in this Compose.",
+      "type": "logs",
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "expr": "{service_name=\"tomcat\"} |~ `${log_search:regex}`",
+          "queryType": "range",
+          "editorMode": "code",
+          "maxLines": 1000
+        }
+      ],
+      "options": {
+        "showTime": true,
+        "showLabels": false,
+        "showCommonLabels": false,
+        "wrapLogMessage": true,
+        "prettifyLogMessage": false,
+        "enableLogDetails": true,
+        "sortOrder": "Descending",
+        "dedupStrategy": "none"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      }
+    },
+    {
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
@@ -21,24 +137,66 @@
         "h": 9,
         "w": 12,
         "x": 0,
-        "y": 0
+        "y": 16
       },
+      "id": 2,
       "targets": [
         {
+          "expr": "increase(tomcat_bytesreceived_total{job=\"$job\", instance=~\"$instance\", protocol=~\"$protocol\"}[5m]) / 5",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Received {{protocol}}[{{port}}] instance={{instance}} ",
           "refId": "A",
-          "expr": "up"
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          }
+        },
+        {
+          "expr": "increase(tomcat_bytessent_total{job=\"$job\", instance=~\"$instance\", protocol=~\"$protocol\"}[5m]) / 5",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Sent {{protocol}}[{{port}}] instance={{instance}} ",
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          }
         }
       ],
-      "options": {},
+      "title": "Traffic / 1 min. rate",
+      "type": "timeseries",
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "unit": "decbytes",
+          "min": 0,
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "spanNulls": false
+          }
+        },
         "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
       }
     },
     {
-      "id": 2,
-      "title": "Memoria JVM",
-      "type": "timeseries",
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
@@ -47,53 +205,956 @@
         "h": 9,
         "w": 12,
         "x": 12,
-        "y": 0
+        "y": 16
       },
+      "id": 4,
       "targets": [
         {
+          "expr": "increase(tomcat_requestcount_total{job=\"$job\", instance=~\"$instance\", protocol=~\"$protocol\"}[5m]) / 5",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Request {{protocol}}[{{port}}] instance={{instance}} ",
           "refId": "A",
-          "expr": "jvm_memory_used_bytes{service_name=\"tomcat\"}"
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          }
+        },
+        {
+          "expr": "increase(tomcat_errorcount_total{job=\"$job\", instance=~\"$instance\", protocol=~\"$protocol\"}[5m]) / 5",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Error {{protocol}}[{{port}}] instance={{instance}} ",
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          }
         }
       ],
-      "options": {},
+      "title": "Request count / 1 min. rate",
+      "type": "timeseries",
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "unit": "short",
+          "min": 0,
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "spanNulls": false
+          }
+        },
         "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
       }
     },
     {
-      "id": 3,
-      "title": "Logs de Tomcat",
-      "type": "logs",
       "datasource": {
-        "type": "loki",
-        "uid": "loki"
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 20,
+        "x": 0,
+        "y": 25
+      },
+      "id": 5,
+      "targets": [
+        {
+          "expr": "sum(increase(tomcat_session_sessioncounter_total{job=\"$job\", instance=~\"$instance\"}[5m]) / 5)",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "New",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          }
+        },
+        {
+          "expr": "sum(increase(tomcat_session_expiredsessions_total{job=\"$job\", instance=~\"$instance\"}[5m]) / 5)",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Expired",
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          }
+        },
+        {
+          "expr": "sum(increase(tomcat_session_rejectedsessions_total{job=\"$job\", instance=~\"$instance\"}[5m]) / 5)",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "Rejected",
+          "refId": "C",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          }
+        }
+      ],
+      "title": "Session count / 1 min. rate",
+      "type": "timeseries",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "min": 0,
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      }
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 20,
+        "y": 25
+      },
+      "id": 19,
+      "targets": [
+        {
+          "expr": "sum(tomcat_session_activesessions{job=\"$job\", instance=~\"$instance\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "instant": true
+        }
+      ],
+      "title": "Session current count",
+      "type": "stat",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "green"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 20,
+        "y": 28
+      },
+      "id": 20,
+      "targets": [
+        {
+          "expr": "sum(tomcat_session_sessioncounter_total{job=\"$job\", instance=~\"$instance\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "instant": true
+        }
+      ],
+      "title": "Session total created",
+      "type": "stat",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "green"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 20,
+        "y": 31
+      },
+      "id": 21,
+      "targets": [
+        {
+          "expr": "sum(tomcat_session_expiredsessions_total{job=\"$job\", instance=~\"$instance\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "instant": true
+        }
+      ],
+      "title": "Session total expired",
+      "type": "stat",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "green"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 2,
+        "y": 34
+      },
+      "id": 14,
+      "targets": [
+        {
+          "expr": "tomcat_threadpool_maxthreads{job=\"$job\", instance=~\"$instance\", protocol=~\"$protocol\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "instant": true
+        }
+      ],
+      "title": "Max threads",
+      "type": "stat",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "green"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 6,
+        "y": 34
+      },
+      "id": 12,
+      "targets": [
+        {
+          "expr": "tomcat_threadpool_minsparethreads{job=\"$job\", instance=~\"$instance\", protocol=~\"$protocol\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "instant": true
+        }
+      ],
+      "title": "Min spare threads",
+      "type": "stat",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "green"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 10,
+        "y": 34
+      },
+      "id": 15,
+      "targets": [
+        {
+          "expr": "tomcat_threadpool_acceptcount{job=\"$job\", instance=~\"$instance\", protocol=~\"$protocol\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "instant": true
+        }
+      ],
+      "title": "Accept count",
+      "type": "stat",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "green"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 14,
+        "y": 34
+      },
+      "id": 16,
+      "targets": [
+        {
+          "expr": "tomcat_threadpool_connectiontimeout{job=\"$job\", instance=~\"$instance\", protocol=~\"$protocol\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "instant": true
+        }
+      ],
+      "title": "Connection timeout",
+      "type": "stat",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "green"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 18,
+        "y": 34
+      },
+      "id": 17,
+      "targets": [
+        {
+          "expr": "tomcat_threadpool_maxconnections{job=\"$job\", instance=~\"$instance\", protocol=~\"$protocol\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
+          "instant": true
+        }
+      ],
+      "title": "Max connections",
+      "type": "stat",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "green"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "value",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      }
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
       },
       "gridPos": {
         "h": 9,
         "w": 24,
         "x": 0,
-        "y": 9
+        "y": 38
       },
+      "id": 10,
       "targets": [
         {
+          "expr": "tomcat_threadpool_currentthreadcount{job=\"$job\", instance=~\"$instance\", protocol=~\"$protocol\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "current {{protocol}}[{{port}}] {{instance}}",
+          "refId": "B",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          }
+        },
+        {
+          "expr": "tomcat_threadpool_currentthreadsbusy{job=\"$job\", instance=~\"$instance\", protocol=~\"$protocol\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "current busy  {{protocol}}[{{port}}] {{instance}}",
+          "refId": "C",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          }
+        },
+        {
+          "expr": "tomcat_threadpool_connectioncount{job=\"$job\", instance=~\"$instance\", protocol=~\"$protocol\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "connection  {{protocol}}[{{port}}] {{instance}}",
+          "refId": "E",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          }
+        },
+        {
+          "expr": "tomcat_threadpool_keepalivecount{job=\"$job\", instance=~\"$instance\", protocol=~\"$protocol\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "keep alive  {{protocol}}[{{port}}] {{instance}}",
           "refId": "A",
-          "expr": "{service_name=\"tomcat\"}"
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          }
         }
       ],
-      "options": {},
+      "title": "Threads",
+      "type": "timeseries",
       "fieldConfig": {
-        "defaults": {},
+        "defaults": {
+          "unit": "short",
+          "min": 0,
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "spanNulls": false
+          }
+        },
         "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      }
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 47
+      },
+      "id": 23,
+      "targets": [
+        {
+          "expr": "topk(5, increase(tomcat_servlet_requestcount_total{job=\"$job\", instance=~\"$instance\"}[5m]) / 5)",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "module={{module}} servlet={{servlet}}",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          }
+        }
+      ],
+      "title": "Top 5 servlet request count / 1min. rate",
+      "type": "timeseries",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "min": 0,
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      }
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 56
+      },
+      "id": 25,
+      "targets": [
+        {
+          "expr": "topk(5, rate(tomcat_servlet_processingtime_total{job=\"$job\", instance=~\"$instance\"}[5m]))",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "module={{module}} servlet={{servlet}}",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          }
+        }
+      ],
+      "title": "Top 5 servlet processing time",
+      "type": "timeseries",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "min": 0,
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      }
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 65
+      },
+      "id": 24,
+      "targets": [
+        {
+          "expr": "topk(5, increase(tomcat_servlet_errorcount_total{job=\"$job\", instance=~\"$instance\"}[5m]) / 5)",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "module={{module}} servlet={{servlet}}",
+          "refId": "A",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          }
+        }
+      ],
+      "title": "Top 5 servlet error count / 1min. rate",
+      "type": "timeseries",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "min": 0,
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "calcs": [
+            "lastNotNull",
+            "max"
+          ]
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
       }
     }
   ],
-  "links": [
-    {
-      "title": "Buscar trazas en Explore / Tempo",
-      "type": "link",
-      "url": "/explore",
-      "targetBlank": false
-    }
-  ]
+  "refresh": "15s",
+  "schemaVersion": 39,
+  "style": "dark",
+  "tags": [
+    "tomcat",
+    "jmx",
+    "loki",
+    "8704"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "text": "tomcat-jmx",
+          "value": "tomcat-jmx"
+        },
+        "hide": 0,
+        "label": "Job",
+        "name": "job",
+        "options": [
+          {
+            "text": "tomcat-jmx",
+            "value": "tomcat-jmx",
+            "selected": true
+          }
+        ],
+        "query": "tomcat-jmx",
+        "skipUrlSync": false,
+        "type": "constant"
+      },
+      {
+        "allValue": ".*",
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "hide": 0,
+        "includeAll": true,
+        "label": "Instance",
+        "multi": false,
+        "name": "instance",
+        "options": [],
+        "query": "label_values(tomcat_serverinfo{job=\"$job\"}, instance)",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false,
+        "definition": "label_values(tomcat_serverinfo{job=\"$job\"}, instance)"
+      },
+      {
+        "allValue": ".*",
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "hide": 0,
+        "includeAll": true,
+        "label": "Protocol",
+        "multi": false,
+        "name": "protocol",
+        "options": [],
+        "query": "label_values(tomcat_bytesreceived_total{job=\"$job\", instance=~\"$instance\"}, protocol)",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false,
+        "definition": "label_values(tomcat_bytesreceived_total{job=\"$job\", instance=~\"$instance\"}, protocol)"
+      },
+      {
+        "name": "log_search",
+        "label": "Log search (literal)",
+        "type": "textbox",
+        "query": "",
+        "current": {
+          "text": "",
+          "value": ""
+        },
+        "options": [],
+        "hide": 0,
+        "skipUrlSync": false
+      }
+    ]
+  },
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m"
+    ],
+    "time_options": [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ]
+  },
+  "timezone": "",
+  "title": "Tomcat observability",
+  "uid": "tomcat-observability",
+  "version": 3,
+  "description": "Based on Grafana.com dashboard 8704 revision 1. Adapted for Grafana 12 / Tomcat 10.1, with Loki logs."
 }
