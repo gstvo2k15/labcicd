@@ -6,6 +6,6 @@ route:
   group_wait: 30s
   group_interval: 5m
   repeat_interval: 4h
-# Visible en la UI. Añadir webhook/email real para notificaciones externas.
+# Alerts are visible in the UI. Configure a real receiver for external delivery.
 receivers:
   - name: local

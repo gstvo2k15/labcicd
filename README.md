@@ -1,13 +1,12 @@
 # labcicd
-Basic repo for lab of CI/CD
 
-## Tomcat y observabilidad en Linux
+CI/CD labs and example projects.
 
-El proyecto está en [`tomcat-observability/`](tomcat-observability/README.md). Incluye Tomcat 10.1 con JDK 17 sobre Alpine, Prometheus, Grafana, Alertmanager, Loki, Tempo y OpenTelemetry Collector, además de comprobaciones con Trivy y Checkov.
+## Tomcat observability on Linux
 
-### Ejecutar desde la raíz del repositorio
+[`tomcat-observability/`](tomcat-observability/README.md) provides Tomcat 10.1 with JDK 17 on Alpine, Prometheus, Grafana, Alertmanager, Loki, OpenTelemetry Collector, and Tempo, plus Checkov and Trivy security checks.
 
-Requisitos: Linux, Docker Engine arrancado, plugin Docker Compose v2 o posterior, Bash 4+, curl, jq y openssl. Reserva unos 4 GB de RAM y comprueba que tu usuario puede ejecutar Docker.
+Requirements: Linux, Docker Engine, Docker Compose v2 or later, Bash 4+, curl, jq, openssl, Docker daemon access, and approximately 4 GB of available RAM.
 
 ```bash
 docker info
@@ -16,36 +15,31 @@ cd tomcat-observability
 bash scripts/setup.sh
 docker compose up -d --build
 docker compose ps
-```
-
-Cuando los servicios estén listos:
-
-```bash
+# Once Tomcat is healthy, generate traffic and allow about 30 seconds for scrapes:
+for i in {1..10}; do curl -fsS http://localhost:8080/; done
 bash scripts/smoke.sh
 cat secrets/grafana_admin_password.txt
 ```
 
-Abre Tomcat en http://localhost:8080 y Grafana en http://localhost:3000. En Grafana usa `admin` y la contraseña del archivo anterior. Prometheus está en http://localhost:9090 y Alertmanager en http://localhost:9093.
+Access Grafana at `http://SERVER_IP:3000/d/tomcat-observability`, Tomcat on port 8080, Prometheus on port 9090, and Alertmanager on port 9093. Grafana uses `admin` by default and the generated secret password. Use `localhost` when browsing on the server itself.
 
-### Comprobar seguridad y detener
-
-Desde `tomcat-observability/`:
+The unified dashboard includes the original availability/JVM/logs overview, Tomcat dashboard 8704 metrics, active alerts, and recent Tempo traces. OpenTelemetry instruments requests and forwards metrics, logs, and traces; Tempo stores traces. Prometheus sends firing alerts to Alertmanager, but the default receiver has no external delivery integration.
 
 ```bash
-# Checkov del Dockerfile y Trivy de todas las imágenes
+# Check Dockerfile policies and scan all Compose images:
 bash scripts/security.sh --all-images
-
-# Consultar logs
+# Diagnose metrics, logs, traces, alerts, and dashboard provisioning:
+bash scripts/diagnose.sh
+# Inspect logs:
 docker compose logs --tail 100 tomcat otel-collector
-
-# Detener conservando los datos
+# Stop while retaining data:
 docker compose down
 ```
 
-Los informes de Trivy se guardan en `tomcat-observability/reports/`. El script devuelve un error si Checkov encuentra incumplimientos o Trivy detecta vulnerabilidades HIGH/CRITICAL.
+Reports are written to `tomcat-observability/reports/`. Checkov policy failures and HIGH/CRITICAL Trivy findings fail the security gate.
 
-Para acceder desde otro equipo, usa la IP del servidor: `http://IP_DEL_SERVIDOR:3000` (Grafana), `:8080` (Tomcat), `:9090` (Prometheus) y `:9093` (Alertmanager). Los puertos escuchan por defecto en todas las interfaces (`BIND_ADDRESS=0.0.0.0`). Puedes elegir una IP concreta en `tomcat-observability/.env`; aplica el cambio con `docker compose up -d` desde ese directorio. Si el firewall filtra estos puertos, permite el acceso desde tu IP o red de administración. Prometheus y Alertmanager no tienen autenticación configurada; limita su acceso a esa red.
+Published ports bind to all interfaces by default (`BIND_ADDRESS=0.0.0.0`). Restrict access to your administration IP/network through host and provider firewalls. Prometheus and Alertmanager do not have authentication configured. Set a specific interface or `127.0.0.1` in the project's `.env` to change the binding, then apply with `docker compose up -d`.
 
-Consulta la [guía completa del proyecto](tomcat-observability/README.md) para verificar métricas, logs y trazas, configurar notificaciones y gestionar los datos.
+For an existing deployment, update the project files, run `docker compose up -d --build`, then `docker compose restart prometheus alertmanager otel-collector grafana` from the project directory. Persistent data and the dashboard UID are retained.
 
-El dashboard **Tomcat observability** integra el [dashboard 8704](https://grafana.com/grafana/dashboards/8704-tomcat-dashboard/) adaptado a Grafana 12, con sus métricas JMX y un panel adicional de logs Loki. Para actualizar una instalación existente, desde `tomcat-observability/` ejecuta `docker compose up -d --build tomcat` y después `docker compose restart prometheus grafana`. Los volúmenes y el enlace al dashboard se conservan.
+See the [complete Linux guide and architecture diagram](tomcat-observability/README.md) for signal flow, alert verification, external receiver configuration, tracing, troubleshooting, password recovery, and data management.

@@ -15,8 +15,8 @@ RUN apk add --no-cache ca-certificates curl tar \
     && echo "${OTEL_SHA256}  /out/agents/opentelemetry-javaagent.jar" | sha256sum -c - \
     && curl -fsSL --retry 3 "https://github.com/prometheus/jmx_exporter/releases/download/${JMX_VERSION}/jmx_prometheus_javaagent-${JMX_VERSION}.jar" -o /out/agents/jmx_prometheus_javaagent.jar \
     && echo "${JMX_SHA256}  /out/agents/jmx_prometheus_javaagent.jar" | sha256sum -c -
-# checkov:skip=CKV_DOCKER_2:Etapa de descarga; no ejecuta un servicio.
-# checkov:skip=CKV_DOCKER_3:Etapa de descarga; apk requiere root. La imagen final usa UID 10001.
+# checkov:skip=CKV_DOCKER_2:Download stage; it does not run a service.
+# checkov:skip=CKV_DOCKER_3:Download stage; apk requires root. The runtime image uses UID 10001.
 
 FROM alpine:3.24.2
 LABEL org.opencontainers.image.title="Tomcat 10 / OpenJDK 17 observability lab"

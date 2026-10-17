@@ -7,11 +7,13 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: 'Scrape fallido: {{ $labels.job }} / {{ $labels.instance }}'
+          summary: 'Scrape failed: {{ $labels.job }} / {{ $labels.instance }}'
+          description: Prometheus has been unable to scrape this target for two minutes.
       - alert: TomcatTelemetryMissing
         expr: absent(jvm_memory_used_bytes{service_name="tomcat"})
         for: 3m
         labels:
           severity: critical
         annotations:
-          summary: Tomcat lleva tres minutos sin métricas JVM
+          summary: Tomcat JVM metrics have been missing for three minutes
+          description: Check Tomcat, the OpenTelemetry Java agent, and the Collector metrics pipeline.

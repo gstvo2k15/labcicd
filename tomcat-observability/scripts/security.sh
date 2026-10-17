@@ -9,16 +9,16 @@ all_images=false
 case "${1:-}" in
   '') ;;
   --all-images) all_images=true ;;
-  *) echo 'Uso: bash scripts/security.sh [--all-images]' >&2; exit 2 ;;
+  *) echo 'Usage: bash scripts/security.sh [--all-images]' >&2; exit 2 ;;
 esac
 
-[[ $# -le 1 ]] || { echo 'Demasiados argumentos.' >&2; exit 2; }
+[[ $# -le 1 ]] || { echo 'Too many arguments.' >&2; exit 2; }
 docker info >/dev/null
 root="$(pwd -P)"
 mkdir -p reports/.trivy-cache
 failed=0
 
-# Checkov comprueba el Dockerfile; Trivy analiza la imagen construida.
+# Checkov checks the Dockerfile; Trivy scans the built image.
 if ! docker run --rm --mount "type=bind,source=$root,target=/src,readonly" \
   bridgecrew/checkov:3.2.471 --directory /src/tomcat --framework dockerfile --compact; then
   failed=1
@@ -33,14 +33,14 @@ if "$all_images"; then
   mapfile -t images <<< "$image_list"
 fi
 
-# Directorio temporal privado: los tar exportados pueden contener secretos.
+# Private temporary directory: exported image archives may contain secrets.
 scan_dir="$(mktemp -d "$root/reports/.scan.XXXXXXXX")"
 trap 'rm -f -- "$scan_dir/image.tar"; rmdir -- "$scan_dir"' EXIT
 
 for image in "${images[@]}"; do
   safe_name="${image//[^a-zA-Z0-9_.-]/_}"
   docker image save --output "$scan_dir/image.tar" "$image"
-  # Sin socket Docker. UID del host para evitar informes propiedad de root.
+  # No Docker socket. Use the host UID so reports are not owned by root.
   if ! docker run --rm --user "$(id -u):$(id -g)" \
     --mount "type=bind,source=$scan_dir,target=/scan,readonly" \
     --mount "type=bind,source=$root/reports,target=/reports" \
@@ -55,8 +55,8 @@ for image in "${images[@]}"; do
 done
 
 if (( failed )); then
-  echo 'Control de seguridad fallido. Revisar Checkov y reports/*.trivy.json.' >&2
+  echo 'Security gate failed. Review Checkov output and reports/*.trivy.json.' >&2
   exit 1
 fi
 
-echo 'Checkov y Trivy superados.'
+echo 'Checkov and Trivy passed.'
