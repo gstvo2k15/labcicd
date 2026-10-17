@@ -23,12 +23,15 @@ Collector Contrib incluye el receptor **filelog**, que es el agente de recogida 
 
 ## Arranque en Linux (Bash)
 
-Desde este directorio, con Docker Engine arrancado:
+Desde la raíz del repositorio, entra primero al directorio del proyecto. Si ya estás en `tomcat-observability/`, omite el `cd`. Docker Engine debe estar arrancado y tu usuario debe tener acceso al daemon.
 
 ```bash
+cd tomcat-observability
 # En Debian/Ubuntu, si faltan herramientas auxiliares:
 # sudo apt-get install bash curl jq openssl
 # Docker Engine y el plugin Compose deben estar previamente instalados.
+docker info
+docker compose version
 bash scripts/setup.sh
 cat secrets/grafana_admin_password.txt
 docker compose up -d --build
