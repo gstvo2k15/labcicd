@@ -11,7 +11,7 @@ Requirements: Linux, Docker Engine, Docker Compose v2 or later, Bash 4+, curl, j
 ```bash
 docker info
 docker compose version
-cd tomcat-observability
+cd tomcat-observability/dockercompose
 bash scripts/setup.sh
 docker compose up -d --build
 docker compose ps
@@ -36,10 +36,13 @@ docker compose logs --tail 100 tomcat otel-collector
 docker compose down
 ```
 
-Reports are written to `tomcat-observability/reports/`. Checkov policy failures and HIGH/CRITICAL Trivy findings fail the security gate.
+Reports are written to `tomcat-observability/dockercompose/reports/`. Checkov policy failures and HIGH/CRITICAL Trivy findings fail the security gate.
 
 Published ports bind to all interfaces by default (`BIND_ADDRESS=0.0.0.0`). Restrict access to your administration IP/network through host and provider firewalls. Prometheus and Alertmanager do not have authentication configured. Set a specific interface or `127.0.0.1` in the project's `.env` to change the binding, then apply with `docker compose up -d`.
 
 For an existing deployment, update the project files, run `docker compose up -d --build`, then `docker compose restart prometheus alertmanager otel-collector grafana` from the project directory. Persistent data and the dashboard UID are retained.
 
-See the [complete Linux guide and architecture diagram](tomcat-observability/README.md) for signal flow, alert verification, external receiver configuration, tracing, troubleshooting, password recovery, and data management.
+See the [complete Compose guide and architecture diagram](tomcat-observability/dockercompose/README.md) for signal flow, alert verification, external receiver configuration, tracing, troubleshooting, password recovery, and data management.
+
+For local Kubernetes, see the [k3s guide](tomcat-observability/kubernetes/README.md).
+The [GitHub Actions pipeline](.github/workflows/tomcat-observability.yml) validates configuration, tests Compose and k3s, and runs Checkov and Trivy security gates.

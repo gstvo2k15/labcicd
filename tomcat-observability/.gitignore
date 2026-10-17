@@ -1,5 +1,1 @@
-.env
-secrets/*
-!secrets/.gitkeep
-reports/*
-!reports/.gitkeep
+__pycache__/
