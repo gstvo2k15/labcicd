@@ -82,7 +82,7 @@ tomcat = container('tomcat', 'lab/tomcat-alpine-jdk17:10.1.61', 10001, 8080, '/'
              OTEL_EXPORTER_OTLP_PROTOCOL='http/protobuf', OTEL_METRICS_EXPORTER='otlp',
              OTEL_TRACES_EXPORTER='otlp', OTEL_LOGS_EXPORTER='none',
              OTEL_METRIC_EXPORT_INTERVAL='15000'))
-collector = container('otel-collector', 'otel/opentelemetry-collector-contrib:0.161.0',
+collector = container('otel-collector', 'otel/opentelemetry-collector-contrib:0.163.1',
     10001, 13133, '/', '384Mi', ['--config=/etc/otelcol/config.yaml'],
     [mount('config', '/etc/otelcol/config.yaml', 'otel-collector.yaml', True),
      mount('logs', '/var/log/tomcat', readonly=True), mount('data', '/var/lib/otelcol')])
@@ -92,16 +92,16 @@ resource('Service', 'otel-collector', spec=dict(selector=dict(app='tomcat'),
     ports=[dict(name='metrics', port=9464, targetPort=9464)]))
 
 for name, image, uid, port, ready, memory, args, data_path, files in [
-    ('prometheus', 'prom/prometheus:v3.5.0', 65534, 9090, '/-/ready', '512Mi',
+    ('prometheus', 'prom/prometheus:v3.15.0', 65534, 9090, '/-/ready', '512Mi',
      ['--config.file=/etc/prometheus/prometheus.yml', '--storage.tsdb.path=/prometheus',
       '--storage.tsdb.retention.time=7d'], '/prometheus',
      [('prometheus.yaml', '/etc/prometheus/prometheus.yml'), ('alerts.yaml', '/etc/prometheus/alerts.yaml')]),
-    ('alertmanager', 'prom/alertmanager:v0.28.1', 65534, 9093, '/-/ready', '128Mi',
+    ('alertmanager', 'prom/alertmanager:v0.34.1', 65534, 9093, '/-/ready', '128Mi',
      ['--config.file=/etc/alertmanager/alertmanager.yml', '--storage.path=/alertmanager'],
      '/alertmanager', [('alertmanager.yaml', '/etc/alertmanager/alertmanager.yml')]),
-    ('loki', 'grafana/loki:3.5.3', 10001, 3100, '/ready', '512Mi',
+    ('loki', 'grafana/loki:3.7.8', 10001, 3100, '/ready', '512Mi',
      ['-config.file=/etc/loki/config.yaml'], '/loki', [('loki.yaml', '/etc/loki/config.yaml')]),
-    ('tempo', 'grafana/tempo:2.8.2', 10001, 3200, '/ready', '384Mi',
+    ('tempo', 'grafana/tempo:2.10.8', 10001, 3200, '/ready', '384Mi',
      ['-config.file=/etc/tempo/config.yaml'], '/var/tempo', [('tempo.yaml', '/etc/tempo/config.yaml')]),
 ]:
     c = container(name, image, uid, port, ready, memory, args,
@@ -111,7 +111,7 @@ for name, image, uid, port, ready, memory, args, data_path, files in [
                           dict(name='tmp', emptyDir={})], uid,
                [port, 4317] if name == 'tempo' else [port])
 
-grafana = container('grafana', 'grafana/grafana:12.1.1', 472, 3000, '/api/health', '384Mi',
+grafana = container('grafana', 'grafana/grafana:12.4.13', 472, 3000, '/api/health', '384Mi',
     mounts=[mount('data', '/var/lib/grafana'), mount('tmp', '/tmp'),
             mount('provisioning', '/etc/grafana/provisioning/datasources/datasources.yaml', 'datasources.yaml', True),
             mount('provisioning', '/etc/grafana/provisioning/dashboards/dashboards.yaml', 'dashboards.yaml', True),

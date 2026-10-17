@@ -210,7 +210,7 @@ docker compose exec -T grafana \
   < secrets/grafana_admin_password.txt
 ```
 
-Check that the command reports success. If login logs show `too many consecutive incorrect login attempts`, stop retrying for at least five minutes before trying again. Grafana 12.1.1 uses a five-minute failed-attempt window. Use the original account name, `admin` by default; changing `GRAFANA_ADMIN_USER` does not rename an existing account. Do not delete volumes to recover access.
+Check that the command reports success. If login logs show `too many consecutive incorrect login attempts`, stop retrying for at least five minutes before trying again. Use the original account name, `admin` by default; changing `GRAFANA_ADMIN_USER` does not rename an existing account. Do not delete volumes to recover access.
 
 ## Security scanning
 
@@ -224,6 +224,19 @@ bash scripts/security.sh --all-images
 Checkov checks Dockerfile practices; Trivy scans built images for vulnerabilities and secrets. Tools run in containers without Docker socket access. Trivy caches its database in `reports/.trivy-cache/` and writes JSON reports to `reports/`. HIGH/CRITICAL findings, including vulnerabilities without fixes, fail the gate. Checkov policy failures also fail the gate. CVEs are not suppressed to obtain a passing result. User/healthcheck exceptions apply only to the download stage, which does not run a service.
 
 Security results depend on current vulnerability data. Update pinned versions, rebuild, and rescan before publishing. Images use version tags rather than immutable digests; pin verified digests for an immutable supply chain. Tomcat downloads are checked against the official SHA-512 file. OpenTelemetry and JMX agent JARs use pinned official SHA-256 hashes in the Dockerfile; update the hash when updating the corresponding version.
+
+If GitHub Actions fails at the security gate, inspect the per-image tables in
+the job log or download the `tomcat-security-reports` artifact from the workflow
+run. Each table lists the CVE, package, installed version and fixed version;
+secret matches are redacted from the log. A scanner error or missing report is
+reported separately from vulnerability findings. The Trivy update notice is
+informational. Update affected image tags or application dependencies, regenerate
+the Kubernetes resources if necessary, and rerun the checks. The gate also blocks
+HIGH/CRITICAL findings with no listed fix; those require an explicit remediation
+decision rather than disabling the gate.
+
+See the [2026-10-18 security review](../SECURITY.md) for the supplied CI reports,
+image upgrades, verification results and remaining upstream findings.
 
 ## Persistence and scope
 

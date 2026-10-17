@@ -62,7 +62,7 @@ services:
 
   otel-collector:
     <<: *hardening
-    image: otel/opentelemetry-collector-contrib:0.161.0
+    image: otel/opentelemetry-collector-contrib:0.163.1
     user: "10001:10001"
     read_only: true
     command: ["--config=/etc/otelcol/config.yaml"]
@@ -82,7 +82,7 @@ services:
 
   prometheus:
     <<: *hardening
-    image: prom/prometheus:v3.5.0
+    image: prom/prometheus:v3.15.0
     user: "65534:65534"
     read_only: true
     command:
@@ -106,7 +106,7 @@ services:
 
   alertmanager:
     <<: *hardening
-    image: prom/alertmanager:v0.28.1
+    image: prom/alertmanager:v0.34.1
     user: "65534:65534"
     read_only: true
     command: ["--config.file=/etc/alertmanager/alertmanager.yml", "--storage.path=/alertmanager"]
@@ -122,7 +122,7 @@ services:
 
   loki:
     <<: *hardening
-    image: grafana/loki:3.5.3
+    image: grafana/loki:3.7.8
     user: "10001:10001"
     read_only: true
     command: ["-config.file=/etc/loki/config.yaml"]
@@ -137,7 +137,7 @@ services:
 
   tempo:
     <<: *hardening
-    image: grafana/tempo:2.8.2
+    image: grafana/tempo:2.10.8
     user: "10001:10001"
     read_only: true
     command: ["-config.file=/etc/tempo/config.yaml"]
@@ -152,7 +152,7 @@ services:
 
   grafana:
     <<: *hardening
-    image: grafana/grafana:12.1.1
+    image: grafana/grafana:12.4.13
     user: "472:472"
     read_only: true
     ports: ["${BIND_ADDRESS:-0.0.0.0}:3000:3000"]
