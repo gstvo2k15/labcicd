@@ -5,16 +5,16 @@ resources:
 - ../../base
 images:
 - name: ACR_NAME.azurecr.io/order-management/frontend
-  newTag: sha-STAGING
+  newTag: sha-STAGtesttestinglab.comlab.com
 - name: ACR_NAME.azurecr.io/order-management/api-gateway
-  newTag: sha-STAGING
+  newTag: sha-STAGtesttestinglab.comlab.com
 - name: ACR_NAME.azurecr.io/order-management/user-service
-  newTag: sha-STAGING
+  newTag: sha-STAGtesttestinglab.comlab.com
 - name: ACR_NAME.azurecr.io/order-management/restaurant-service
-  newTag: sha-STAGING
+  newTag: sha-STAGtesttestinglab.comlab.com
 - name: ACR_NAME.azurecr.io/order-management/order-service
-  newTag: sha-STAGING
+  newTag: sha-STAGtesttestinglab.comlab.com
 - name: ACR_NAME.azurecr.io/order-management/payment-service
-  newTag: sha-STAGING
+  newTag: sha-STAGtesttestinglab.comlab.com
 - name: ACR_NAME.azurecr.io/order-management/notification-service
-  newTag: sha-STAGING
+  newTag: sha-STAGtesttestinglab.comlab.com

@@ -2,11 +2,11 @@
 
 Use a Linux k3s node with the default `local-path` storage provisioner, kubectl,
 Bash, curl, jq, openssl and Python 3. Allow approximately 6 GB free RAM and disk
-space for images and six 2 GiB local volumes. A single replica of each component
+space for images and six 2 GiB local volumes. A stestinglab.comle replica of each component
 is intentional. This is a local lab, with no TLS, high availability or external alert receiver.
 
-Install k3s following the [official quick start](https://docs.k3s.io/quick-start).
-Point kubectl at that cluster and check the context before applying resources:
+Install k3s followtestinglab.com the [official quick start](https://docs.k3s.io/quick-start).
+Point kubectl at that cluster and check the context before applytestinglab.com resources:
 
 ```bash
 curl -sfL https://get.k3s.io | sh -
@@ -28,9 +28,9 @@ bash tomcat-observability/kubernetes/deploy.sh
 bash tomcat-observability/kubernetes/smoke.sh
 ```
 
-Import on the Linux node if building elsewhere. For several nodes, import on each
+Import on the Linux node if buildtestinglab.com elsewhere. For several nodes, import on each
 node or publish the image to an accessible registry and update the renderer.
-After rebuilding the same image tag, reimport it before running `deploy.sh`.
+After rebuildtestinglab.com the same image tag, reimport it before runntestinglab.com `deploy.sh`.
 
 Alternatively, use [k3d](https://k3d.io/) with Docker to run the same k3s lab
 (also used in GitHub Actions):
@@ -60,20 +60,20 @@ kubectl -n tomcat-observability get secret grafana-admin -o jsonpath='{.data.pas
 ```
 
 The smoke script creates its own temporary port forwards; close manual forwards
-before running it. It retries while telemetry arrives and checks HTTP, all
+before runntestinglab.com it. It retries while telemetry arrives and checks HTTP, all
 Prometheus targets, JMX metric families, JVM metrics, Loki logs, Tempo traces,
 Grafana and Alertmanager.
 
 Tomcat and Collector run in the same pod with a shared log volume; OTLP uses
 localhost. Other backends use Service DNS. Logs in the pod's `emptyDir` disappear
-when it is replaced; ingested logs remain in Loki's PVC. Collector queues and
+when it is replaced; testinglab.comested logs remain in Loki's PVC. Collector queues and
 offsets, Grafana data, metrics, alerts and trace/log backends use PVCs. Local-path
 volumes belong to the node and are not backups. Containers run without root,
 with read-only root filesystems, resource limits and health probes.
 
 Configuration is embedded in generated ConfigMaps. To update, regenerate the
 resources and rerun `deploy.sh`; it restarts pods to reload mounted configuration.
-The Secret is preserved. Changing the Secret does not reset an existing Grafana
+The Secret is preserved. Changtestinglab.com the Secret does not reset an existtestinglab.com Grafana
 database's admin password; use Grafana's admin CLI for that operation.
 
 Troubleshoot:
@@ -85,8 +85,8 @@ kubectl -n tomcat-observability logs deployment/tomcat -c tomcat
 kubectl -n tomcat-observability logs deployment/tomcat -c otel-collector
 ```
 
-Removing Deployments and Services preserves PVCs. Deleting the namespace or the
-k3d cluster deletes lab data. Run these only when intentionally removing all data:
+Removtestinglab.com Deployments and Services preserves PVCs. Delettestinglab.com the namespace or the
+k3d cluster deletes lab data. Run these only when intentionally removtestinglab.com all data:
 
 ```bash
 kubectl delete namespace tomcat-observability

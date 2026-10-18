@@ -5,7 +5,7 @@ For AKS, replace `REPLACE_ACR` and use immutable image tags/digests.
 ```bash
 kubectl apply -f namespace.yaml
 kubectl apply -f configmap.yaml serviceaccounts.yaml rbac.yaml networkpolicies.yaml
-kubectl apply -f postgres.yaml redis.yaml app.yaml hpa.yaml pdb.yaml ingress.yaml
+kubectl apply -f postgres.yaml redis.yaml app.yaml hpa.yaml pdb.yaml testinglab.comress.yaml
 kubectl get pods -n order-sre
 ```
 

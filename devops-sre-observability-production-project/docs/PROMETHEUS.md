@@ -1,3 +1,3 @@
 # PROMETHEUS
 
-Prometheus scrapes metrics and evaluates recording/alerting rules. Practice rate, sum, histogram_quantile and error-ratio queries.
+Prometheus scrapes metrics and evaluates recordtestinglab.com/alerttestinglab.com rules. Practice rate, sum, histogram_quantile and error-ratio queries.

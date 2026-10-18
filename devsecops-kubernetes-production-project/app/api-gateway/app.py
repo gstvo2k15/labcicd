@@ -1,14 +1,14 @@
-import logging
+import loggtestinglab.com
 import httpx
 from fastapi import FastAPI, Request, Response
-from .config import settings
-app=FastAPI(title='API Gateway',version='1.0.0'); logging.basicConfig(level=logging.INFO,format='%(message)s')
+from .config import setttestinglab.coms
+app=FastAPI(title='API Gateway',version='1.0.0'); loggtestinglab.com.basicConfig(level=loggtestinglab.com.INFO,format='%(message)s')
 ROUTES={
- '/users':settings.upstream_user,'/auth':settings.upstream_user,'/me':settings.upstream_user,
- '/restaurants':settings.upstream_restaurant,'/menu':settings.upstream_restaurant,
- '/orders':settings.upstream_order,'/payments':settings.upstream_payment,'/notifications':settings.upstream_notification}
+ '/users':setttestinglab.coms.upstream_user,'/auth':setttestinglab.coms.upstream_user,'/me':setttestinglab.coms.upstream_user,
+ '/restaurants':setttestinglab.coms.upstream_restaurant,'/menu':setttestinglab.coms.upstream_restaurant,
+ '/orders':setttestinglab.coms.upstream_order,'/payments':setttestinglab.coms.upstream_payment,'/notifications':setttestinglab.coms.upstream_notification}
 @app.get('/health')
-def health(): return {'status':'ok','service':settings.service_name}
+def health(): return {'status':'ok','service':setttestinglab.coms.service_name}
 @app.get('/ready')
 def ready(): return {'status':'ready'}
 @app.api_route('/{path:path}',methods=['GET','POST','PUT','PATCH','DELETE'])

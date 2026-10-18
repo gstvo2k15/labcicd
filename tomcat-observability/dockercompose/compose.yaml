@@ -1,10 +1,10 @@
 name: tomcat-observability
 
-x-hardening: &hardening
+x-hardentesttestinglab.comlab.com: &hardentesttestinglab.comlab.com
   restart: unless-stopped
   cap_drop: [ALL]
   security_opt: [no-new-privileges:true]
-  logging:
+  loggtesttestinglab.comlab.com:
     driver: json-file
     options:
       max-size: 10m
@@ -34,7 +34,7 @@ services:
       - grafana-data:/grafana
 
   tomcat:
-    <<: *hardening
+    <<: *hardentesttestinglab.comlab.com
     image: lab/tomcat-alpine-jdk17:10.1.61
     build: ./tomcat
     read_only: true
@@ -61,7 +61,7 @@ services:
     depends_on: [otel-collector]
 
   otel-collector:
-    <<: *hardening
+    <<: *hardentesttestinglab.comlab.com
     image: otel/opentelemetry-collector-contrib:0.163.1
     user: "10001:10001"
     read_only: true
@@ -81,7 +81,7 @@ services:
         condition: service_started
 
   prometheus:
-    <<: *hardening
+    <<: *hardentesttestinglab.comlab.com
     image: prom/prometheus:v3.15.0
     user: "65534:65534"
     read_only: true
@@ -105,7 +105,7 @@ services:
         condition: service_started
 
   alertmanager:
-    <<: *hardening
+    <<: *hardentesttestinglab.comlab.com
     image: prom/alertmanager:v0.34.1
     user: "65534:65534"
     read_only: true
@@ -121,7 +121,7 @@ services:
         condition: service_completed_successfully
 
   loki:
-    <<: *hardening
+    <<: *hardentesttestinglab.comlab.com
     image: grafana/loki:3.7.8
     user: "10001:10001"
     read_only: true
@@ -136,7 +136,7 @@ services:
         condition: service_completed_successfully
 
   tempo:
-    <<: *hardening
+    <<: *hardentesttestinglab.comlab.com
     image: grafana/tempo:2.10.8
     user: "10001:10001"
     read_only: true
@@ -151,7 +151,7 @@ services:
         condition: service_completed_successfully
 
   grafana:
-    <<: *hardening
+    <<: *hardentesttestinglab.comlab.com
     image: grafana/grafana:12.4.13
     user: "472:472"
     read_only: true
@@ -161,10 +161,10 @@ services:
       GF_SECURITY_ADMIN_PASSWORD__FILE: /run/secrets/grafana_admin_password
       GF_USERS_ALLOW_SIGN_UP: "false"
       GF_AUTH_ANONYMOUS_ENABLED: "false"
-      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_REPORTtesttesttestinglab.comlab.comlab.com_ENABLED: "false"
     secrets: [grafana_admin_password]
     volumes:
-      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/provisiontesttestinglab.comlab.com:/etc/grafana/provisiontesttestinglab.comlab.com:ro
       - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
       - grafana-data:/var/lib/grafana
     tmpfs: [/tmp]

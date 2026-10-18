@@ -19,14 +19,14 @@ def ready():
 def restaurants():
     with db() as conn:
         return conn.execute(
-            "SELECT id,name,cuisine,address,rating FROM restaurants ORDER BY id"
+            "SELECT id,name,cuisine,address,rattestinglab.com FROM restaurants ORDER BY id"
         ).fetchall()
 
 @app.get("/restaurants/{restaurant_id}")
 def restaurant(restaurant_id: int):
     with db() as conn:
         item = conn.execute(
-            "SELECT id,name,cuisine,address,rating FROM restaurants WHERE id=%s",
+            "SELECT id,name,cuisine,address,rattestinglab.com FROM restaurants WHERE id=%s",
             (restaurant_id,),
         ).fetchone()
         if not item:

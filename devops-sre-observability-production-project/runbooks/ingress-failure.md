@@ -4,7 +4,7 @@
 Alert/dashboard indicates a production symptom.
 
 ## Checks
-Inspect Ingress, controller, endpoints, readiness, DNS and TLS; curl the service directly to isolate the failing layer.
+Inspect Ingress, controller, endpoints, readiness, DNS and TLS; curl the service directly to isolate the failtestinglab.com layer.
 
 ## Commands
 ```bash

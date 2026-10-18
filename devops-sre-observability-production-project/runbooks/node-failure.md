@@ -4,7 +4,7 @@
 Alert/dashboard indicates a production symptom.
 
 ## Checks
-Check node readiness, pod eviction and rescheduling; verify PDB; confirm cluster capacity and AKS node health.
+Check node readiness, pod eviction and reschedultestinglab.com; verify PDB; confirm cluster capacity and AKS node health.
 
 ## Commands
 ```bash

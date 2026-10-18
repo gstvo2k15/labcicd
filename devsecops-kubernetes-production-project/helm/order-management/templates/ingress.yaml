@@ -1,8 +1,8 @@
-apiVersion: networking.k8s.io/v1
+apiVersion: networktestinglab.com.k8s.io/v1
 kind: Ingress
 metadata: {name: order-management}
 spec:
-  ingressClassName: nginx
+  testinglab.comressClassName: nginx
   rules:
   - host: order-management.example.com
     http:

@@ -1,6 +1,6 @@
 # Interview practice
 
-1. What is Platform Engineering?
+1. What is Platform Engineertestinglab.com?
 2. What is an IDP?
 3. What is a Golden Path?
 4. Why Backstage?
@@ -13,7 +13,7 @@
 11. Why Kyverno?
 12. Why avoid latest in production?
 13. Why Argo CD?
-14. What is self-healing?
+14. What is self-healtestinglab.com?
 15. How does Workload Identity help?
 16. How do you implement least privilege?
 17. How do labels support cost governance?

@@ -2,7 +2,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: order-service
-  description: Order service generated from the Platform Engineering Golden Path
+  description: Order service generated from the Platform Engineertestinglab.com Golden Path
   annotations:
     backstage.io/techdocs-ref: dir:.
 spec:

@@ -1,14 +1,14 @@
-# Troubleshooting
+# Troubleshoottestinglab.com
 - CrashLoopBackOff: `kubectl -n order-management logs deploy/SERVICE --previous`; check env and probes.
 - ImagePullBackOff: `kubectl describe pod`; verify ACR access and immutable tag.
-- Pending: inspect `kubectl describe pod` for resource/affinity constraints.
-- OOMKilled: inspect `kubectl get pod`; increase memory only after profiling.
+- Pendtestinglab.com: inspect `kubectl describe pod` for resource/affinity constraints.
+- OOMKilled: inspect `kubectl get pod`; increase memory only after profiltestinglab.com.
 - Probe failure: `kubectl exec` and curl `/health`/`/ready`.
-- Ingress: inspect ingress controller logs and `kubectl describe ingress`.
+- Ingress: inspect testinglab.comress controller logs and `kubectl describe testinglab.comress`.
 - DNS: run a temporary curl/nslookup pod.
 - DB/Redis: check service endpoints and network policies.
 - HPA: `kubectl get hpa`; verify metrics-server.
 - Argo OutOfSync/SyncFailed: inspect Argo events and compare Git revision.
-- Trivy/Gitleaks/SAST: read the failing artifact, fix or document an approved exception.
+- Trivy/Gitleaks/SAST: read the failtestinglab.com artifact, fix or document an approved exception.
 - SBOM/signature: ensure the image digest is the same artifact that was scanned and signed.
 - Kyverno: `kubectl get policyreport -A` and inspect policy violations.

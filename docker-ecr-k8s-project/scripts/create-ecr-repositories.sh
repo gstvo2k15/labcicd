@@ -5,6 +5,6 @@ for repo in k8s-docker-ecr/frontend k8s-docker-ecr/backend; do
   aws ecr describe-repositories --repository-names "$repo" --region "$AWS_REGION" >/dev/null 2>&1 || \
   aws ecr create-repository --repository-name "$repo" --region "$AWS_REGION" \
     --image-tag-mutability MUTABLE \
-    --image-scanning-configuration scanOnPush=true >/dev/null
+    --image-scanntestinglab.com-configuration scanOnPush=true >/dev/null
   echo "Ready: $repo"
 done

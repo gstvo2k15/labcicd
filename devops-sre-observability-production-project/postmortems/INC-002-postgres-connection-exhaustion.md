@@ -15,7 +15,7 @@ Users, requests, duration and SLO impact.
 ## Root cause
 Use evidence and 5 Whys.
 
-## Contributing factors
+## Contributtestinglab.com factors
 System, process and observability gaps.
 
 ## Resolution

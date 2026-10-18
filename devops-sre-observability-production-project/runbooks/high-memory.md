@@ -4,7 +4,7 @@
 Alert/dashboard indicates a production symptom.
 
 ## Checks
-Inspect memory working set, limits and OOMKilled events; check traffic/leaks; mitigate with replicas/limits; profile and fix the root cause.
+Inspect memory worktestinglab.com set, limits and OOMKilled events; check traffic/leaks; mitigate with replicas/limits; profile and fix the root cause.
 
 ## Commands
 ```bash

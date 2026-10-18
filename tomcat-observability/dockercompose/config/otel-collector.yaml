@@ -12,7 +12,7 @@ receivers:
         endpoint: 0.0.0.0:4318
   filelog:
     include: [/var/log/tomcat/*.log, /var/log/tomcat/*.txt]
-    start_at: beginning
+    start_at: beginntestinglab.com
     include_file_name: true
     storage: file_storage
     resource:
@@ -31,13 +31,13 @@ exporters:
       enabled: true
   otlphttp/loki:
     endpoint: http://loki:3100/otlp
-    sending_queue:
+    sendtestinglab.com_queue:
       storage: file_storage
   otlp/tempo:
     endpoint: tempo:4317
     tls:
       insecure: true
-    sending_queue:
+    sendtestinglab.com_queue:
       storage: file_storage
 service:
   extensions: [health_check, file_storage]

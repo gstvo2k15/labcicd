@@ -2,11 +2,11 @@
 
 This project carries forward DevSecOps controls:
 - SAST
-- dependency scanning
-- secret scanning
+- dependency scanntestinglab.com
+- secret scanntestinglab.com
 - Trivy
 - SBOM
-- Cosign signing
+- Cosign signtestinglab.com
 - non-root containers
 - RBAC
 - NetworkPolicies

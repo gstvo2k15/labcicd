@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: order-management-staging
+  name: order-management-stagtestinglab.com
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/REPLACE_ORG/devops-sre-observability-production-project.git
     targetRevision: main
-    path: gitops/environments/staging
+    path: gitops/environments/stagtestinglab.com
   destination:
     server: https://kubernetes.default.svc
     namespace: order-sre

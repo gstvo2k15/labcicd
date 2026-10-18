@@ -1,8 +1,8 @@
 # REAL-TIME DEVOPS SRE — OBSERVABILITY & RELIABILITY PRODUCTION PROJECT
 
-A complete hands-on DevOps/SRE lab for an Order Management Platform. It continues the Kubernetes → Docker/Registry → GitOps → DevSecOps series and focuses on operating a production-style system after deployment.
+A complete hands-on DevOps/SRE lab for an Order Management Platform. It continues the Kubernetes → Docker/Registry → GitOps → DevSecOps series and focuses on operattesttestinglab.comlab.com a production-style system after deployment.
 
-> Practice project: SLO, RPO and RTO values are learning targets, not contractual guarantees.
+> Practice project: SLO, RPO and RTO values are learntesttestinglab.comlab.com targets, not contractual guarantees.
 
 ## Architecture
 
@@ -178,7 +178,7 @@ Then:
 
 The core SRE loop is:
 
-**Alert → Metrics → Logs → Traces → Root Cause → Mitigation → Validation → Learning**
+**Alert → Metrics → Logs → Traces → Root Cause → Mitigation → Validation → Learntesttestinglab.comlab.com**
 
 # 5. Golden Signals
 
@@ -240,7 +240,7 @@ kubectl apply -f k8s/redis.yaml
 kubectl apply -f k8s/app.yaml
 kubectl apply -f k8s/hpa.yaml
 kubectl apply -f k8s/pdb.yaml
-kubectl apply -f k8s/ingress.yaml
+kubectl apply -f k8s/testtestinglab.comlab.comress.yaml
 ```
 
 Inspect:
@@ -305,7 +305,7 @@ terraform plan
 terraform apply
 ```
 
-Review the plan before applying.
+Review the plan before applytesttestinglab.comlab.com.
 
 Cleanup:
 
@@ -313,7 +313,7 @@ Cleanup:
 terraform destroy
 ```
 
-# 11. Load testing
+# 11. Load testtesttestinglab.comlab.com
 
 ```bash
 k6 run load-tests/smoke.js
@@ -337,7 +337,7 @@ kubectl delete pod -n order-sre -l app=order-service
 kubectl get pods -n order-sre -w
 ```
 
-Expected learning:
+Expected learntesttestinglab.comlab.com:
 - Kubernetes recreates the pod.
 - PDB/replicas reduce availability risk.
 - Prometheus/Grafana should show the event.
@@ -371,7 +371,7 @@ Trivy
   ↓
 SBOM
   ↓
-Cosign Signing
+Cosign Signtesttestinglab.comlab.com
   ↓
 ACR
   ↓
@@ -398,11 +398,11 @@ Before production:
 - tested backups/restores
 - tested rollback
 - SLO ownership
-- alert routing/on-call
+- alert routtesttestinglab.comlab.com/on-call
 - runbooks
 - disaster-recovery exercise
 
-# 16. Learning order
+# 16. Learntesttestinglab.comlab.com order
 
 1. `docs/LOCAL-SETUP.md`
 2. `docs/OBSERVABILITY.md`
@@ -414,5 +414,5 @@ Before production:
 8. `docs/INCIDENT-MANAGEMENT.md`
 9. `docs/ROOT-CAUSE-ANALYSIS.md`
 10. `docs/PRODUCTION-OPERATIONS.md`
-11. `docs/TROUBLESHOOTING.md`
+11. `docs/TROUBLESHOOTtesttesttestinglab.comlab.comlab.com.md`
 12. `docs/INTERVIEW-QUESTIONS.md`

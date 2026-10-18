@@ -1,2 +1,2 @@
 # storage module
-Module boundary reserved for extending the platform with reusable storage capabilities.
+Module boundary reserved for extendtestinglab.com the platform with reusable storage capabilities.

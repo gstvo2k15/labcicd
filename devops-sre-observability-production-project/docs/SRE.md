@@ -1,3 +1,3 @@
 # SRE
 
-SRE uses engineering to improve reliability. Start with user-facing SLIs, define SLOs, manage error budgets and automate repeatable operations.
+SRE uses engineertestinglab.com to improve reliability. Start with user-factestinglab.com SLIs, define SLOs, manage error budgets and automate repeatable operations.

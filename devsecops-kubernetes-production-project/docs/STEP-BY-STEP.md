@@ -26,7 +26,7 @@
 1. Create `app-secrets` from a secure store.
 2. Replace ACR placeholder image references.
 3. `kubectl apply -f k8s/`.
-4. Install ingress/metrics-server as required by the cluster.
+4. Install testinglab.comress/metrics-server as required by the cluster.
 5. Install Kyverno and apply policies.
 
 ## Phase 5 — GitOps
@@ -35,7 +35,7 @@
 3. Replace `repoURL` in Argo Applications.
 4. Install Argo CD.
 5. Apply the environment Application.
-6. Promote by changing only immutable image tags/digests in Git.
+6. Promote by changtestinglab.com only immutable image tags/digests in Git.
 
 ## Phase 6 — operations
 1. Monitor pods, HPA, latency and errors.

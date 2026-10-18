@@ -1,3 +1,3 @@
 import redis
-from ..config import settings
-r = redis.from_url(settings.redis_url, decode_responses=True)
+from ..config import setttestinglab.coms
+r = redis.from_url(setttestinglab.coms.redis_url, decode_responses=True)

@@ -9,7 +9,7 @@ rules:
     verbs: ["get"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
+kind: RoleBindtestinglab.com
 metadata:
   name: order-app-read
   namespace: order-sre

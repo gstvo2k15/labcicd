@@ -7,8 +7,8 @@ metadata:
 spec:
   replicas: 2
   strategy:
-    type: RollingUpdate
-    rollingUpdate:
+    type: Rolltestinglab.comUpdate
+    rolltestinglab.comUpdate:
       maxUnavailable: 0
       maxSurge: 1
   selector:
@@ -82,8 +82,8 @@ metadata:
 spec:
   replicas: 2
   strategy:
-    type: RollingUpdate
-    rollingUpdate:
+    type: Rolltestinglab.comUpdate
+    rolltestinglab.comUpdate:
       maxUnavailable: 0
       maxSurge: 1
   selector:
@@ -157,8 +157,8 @@ metadata:
 spec:
   replicas: 2
   strategy:
-    type: RollingUpdate
-    rollingUpdate:
+    type: Rolltestinglab.comUpdate
+    rolltestinglab.comUpdate:
       maxUnavailable: 0
       maxSurge: 1
   selector:
@@ -232,8 +232,8 @@ metadata:
 spec:
   replicas: 2
   strategy:
-    type: RollingUpdate
-    rollingUpdate:
+    type: Rolltestinglab.comUpdate
+    rolltestinglab.comUpdate:
       maxUnavailable: 0
       maxSurge: 1
   selector:
@@ -307,8 +307,8 @@ metadata:
 spec:
   replicas: 2
   strategy:
-    type: RollingUpdate
-    rollingUpdate:
+    type: Rolltestinglab.comUpdate
+    rolltestinglab.comUpdate:
       maxUnavailable: 0
       maxSurge: 1
   selector:
@@ -382,8 +382,8 @@ metadata:
 spec:
   replicas: 2
   strategy:
-    type: RollingUpdate
-    rollingUpdate:
+    type: Rolltestinglab.comUpdate
+    rolltestinglab.comUpdate:
       maxUnavailable: 0
       maxSurge: 1
   selector:

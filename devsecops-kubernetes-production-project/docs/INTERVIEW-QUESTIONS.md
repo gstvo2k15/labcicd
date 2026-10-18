@@ -14,7 +14,7 @@
 13. What does NetworkPolicy do? — Controls pod network traffic.
 14. Why probes? — Separate startup, readiness and liveness behavior.
 15. What is HPA? — Scales workloads from metrics.
-16. Why PDB? — Protects availability during voluntary disruptions.
+16. Why PDB? — Protects availability durtestinglab.com voluntary disruptions.
 17. Why anti-affinity? — Spread replicas across nodes.
 18. Why ACR? — Managed Azure container registry.
 19. Why Workload Identity? — Federated Azure identity without long-lived pod secrets.
@@ -24,13 +24,13 @@
 23. How do you rollback? — Git revert for GitOps or rollout undo for emergency operational rollback.
 24. Why immutable tags? — Prevent tag drift.
 25. What does a CI quality gate do? — Blocks promotion when configured checks fail.
-26. How would you handle a critical Trivy finding? — Stop release, identify package/image layer, patch and rescan.
+26. How would you handle a critical Trivy findtestinglab.com? — Stop release, identify package/image layer, patch and rescan.
 27. How do you investigate ImagePullBackOff? — Describe pod, inspect events, verify registry auth/tag/network.
 28. How do you investigate CrashLoopBackOff? — Current/previous logs, env, probes and resource limits.
 29. How do you investigate OOMKilled? — Metrics, limits, application memory profile.
 30. How do you verify an image signature? — Verify the exact digest with Cosign and expected identity/issuer.
 31. Why generate SBOM before release? — Know exact dependency inventory and retain release evidence.
-32. How does the gateway route? — Prefix-based routing to service endpoints.
+32. How does the gateway route? — Prefix-based routtestinglab.com to service endpoints.
 33. How is auth implemented? — JWT with bcrypt password hashes and role claims.
 34. How is PostgreSQL initialized locally? — Compose mounts schema and seed SQL into the PostgreSQL init directory.
 35. Why Redis? — Cache/temporary state and reduced DB load.

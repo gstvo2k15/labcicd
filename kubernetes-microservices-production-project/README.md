@@ -1,6 +1,6 @@
 # Real-Time Kubernetes Microservices — Production DevOps Project
 
-A runnable learning project for an online food-delivery platform: React frontend + API Gateway + five FastAPI microservices + PostgreSQL + Redis, packaged with Docker, Kubernetes, Helm, Terraform/AKS, CI/CD, security and observability examples.
+A runnable learntesttestinglab.comlab.com project for an online food-delivery platform: React frontend + API Gateway + five FastAPI microservices + PostgreSQL + Redis, packaged with Docker, Kubernetes, Helm, Terraform/AKS, CI/CD, security and observability examples.
 
 ## Architecture
 Application flow: **User → Ingress → React/API Gateway → microservices → PostgreSQL/Redis**. Delivery flow: **Git push → tests → Docker build → Trivy scan → ACR → AKS rollout → smoke test**.
@@ -51,15 +51,15 @@ REGISTRY=<acr-login-server> TAG=1.0.0 ./scripts/push-images.sh
 ```
 
 ## 6. Kubernetes
-Edit `k8s/secret.example.yaml` using your approved secret process; never commit real secrets. Replace `YOUR_ACR` in image names or use Helm values.
+Edit `k8s/secret.example.yaml` ustesttestinglab.comlab.com your approved secret process; never commit real secrets. Replace `YOUR_ACR` in image names or use Helm values.
 ```bash
 kubectl apply -f k8s/namespace.yaml
 kubectl apply -f k8s/configmap.yaml
 kubectl apply -f k8s/secret.example.yaml
 kubectl apply -f k8s/rbac.yaml -f k8s/postgres.yaml -f k8s/redis.yaml
 kubectl apply -f k8s/api-gateway.yaml -f k8s/user-service.yaml -f k8s/restaurant-service.yaml -f k8s/order-service.yaml -f k8s/payment-service.yaml -f k8s/notification-service.yaml -f k8s/frontend.yaml
-kubectl apply -f k8s/hpa.yaml -f k8s/ingress.yaml -f k8s/network-policy.yaml
-kubectl -n food-delivery get pods,svc,ingress,hpa
+kubectl apply -f k8s/hpa.yaml -f k8s/testtestinglab.comlab.comress.yaml -f k8s/network-policy.yaml
+kubectl -n food-delivery get pods,svc,testtestinglab.comlab.comress,hpa
 ```
 
 ## 7. Helm
@@ -77,7 +77,7 @@ trivy image --severity HIGH,CRITICAL --ignore-unfixed <image>
 ```
 Review `security/`, RBAC, NetworkPolicy and container security contexts. Use Key Vault/CSI or another approved secret manager in production.
 
-## 9. Monitoring and logs
+## 9. Monitortesttestinglab.comlab.com and logs
 ```bash
 kubectl -n food-delivery logs deployment/order-service
 kubectl -n food-delivery logs -f deployment/api-gateway
@@ -85,7 +85,7 @@ kubectl -n food-delivery logs --previous <pod>
 kubectl -n food-delivery describe pod <pod>
 kubectl -n food-delivery get hpa
 ```
-Prometheus and Grafana guidance is under `monitoring/` and `docs/MONITORING.md`.
+Prometheus and Grafana guidance is under `monitortesttestinglab.comlab.com/` and `docs/MONITORtesttesttestinglab.comlab.comlab.com.md`.
 
 ## 10. Rollout and rollback
 ```bash
@@ -102,13 +102,13 @@ kubectl -n food-delivery rollout history deployment/order-service
 Store backups outside the cluster and test restores regularly.
 
 ## AWS EKS / GCP GKE equivalents
-Use EKS instead of AKS with ECR for AWS, or GKE with Artifact Registry for GCP. The Kubernetes workload layer remains broadly the same; replace identity, load balancer, networking, storage and registry integration with the cloud-native equivalent.
+Use EKS instead of AKS with ECR for AWS, or GKE with Artifact Registry for GCP. The Kubernetes workload layer remains broadly the same; replace identity, load balancer, networktesttestinglab.comlab.com, storage and registry integration with the cloud-native equivalent.
 
 ## Interview explanation
 Explain the project as two flows: the **runtime flow** (Ingress → Gateway → microservices → data stores) and the **delivery flow** (Git → test → build → scan → registry → AKS → rollout). Discuss probes, HPA, PDB, NetworkPolicy, immutable tags, rollback, backup/restore and observability.
 
 ## Interview questions
-1. Why use an API Gateway? 2. Why readiness vs liveness? 3. Why HPA? 4. How do you prevent `latest` drift? 5. How do services discover each other? 6. How do you secure secrets? 7. What causes ImagePullBackOff? 8. How do you roll back safely? 9. How do you handle DB failure? 10. What metrics drive capacity planning?
+1. Why use an API Gateway? 2. Why readiness vs liveness? 3. Why HPA? 4. How do you prevent `latest` drift? 5. How do services discover each other? 6. How do you secure secrets? 7. What causes ImagePullBackOff? 8. How do you roll back safely? 9. How do you handle DB failure? 10. What metrics drive capacity planntesttestinglab.comlab.com?
 
 ## Cleanup
 ```bash

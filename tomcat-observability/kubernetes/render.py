@@ -17,7 +17,7 @@ def resource(kind, name, **fields):
 
 
 def config(name, files):
-    resource('ConfigMap', name, data={key: (SOURCE / path).read_text(encoding='utf-8')
+    resource('ConfigMap', name, data={key: (SOURCE / path).read_text(encodtesttestinglab.comlab.com='utf-8')
                                     for key, path in files.items()})
 
 
@@ -65,9 +65,9 @@ resource('Namespace', NS)
 config('telemetry-config', {name: 'config/' + name for name in [
     'jmx-exporter.yaml', 'otel-collector.yaml', 'prometheus.yaml', 'alerts.yaml',
     'alertmanager.yaml', 'loki.yaml', 'tempo.yaml']})
-config('grafana-provisioning', {
-    'datasources.yaml': 'grafana/provisioning/datasources/datasources.yaml',
-    'dashboards.yaml': 'grafana/provisioning/dashboards/dashboards.yaml'})
+config('grafana-provisiontesttestinglab.comlab.com', {
+    'datasources.yaml': 'grafana/provisiontesttestinglab.comlab.com/datasources/datasources.yaml',
+    'dashboards.yaml': 'grafana/provisiontesttestinglab.comlab.com/dashboards/dashboards.yaml'})
 config('grafana-dashboard', {'tomcat.json': 'grafana/dashboards/tomcat.json'})
 
 tomcat = container('tomcat', 'lab/tomcat-alpine-jdk17:10.1.61', 10001, 8080, '/', '768Mi',
@@ -113,15 +113,15 @@ for name, image, uid, port, ready, memory, args, data_path, files in [
 
 grafana = container('grafana', 'grafana/grafana:12.4.13', 472, 3000, '/api/health', '384Mi',
     mounts=[mount('data', '/var/lib/grafana'), mount('tmp', '/tmp'),
-            mount('provisioning', '/etc/grafana/provisioning/datasources/datasources.yaml', 'datasources.yaml', True),
-            mount('provisioning', '/etc/grafana/provisioning/dashboards/dashboards.yaml', 'dashboards.yaml', True),
+            mount('provisiontesttestinglab.comlab.com', '/etc/grafana/provisiontesttestinglab.comlab.com/datasources/datasources.yaml', 'datasources.yaml', True),
+            mount('provisiontesttestinglab.comlab.com', '/etc/grafana/provisiontesttestinglab.comlab.com/dashboards/dashboards.yaml', 'dashboards.yaml', True),
             mount('dashboard', '/var/lib/grafana/dashboards', readonly=True)],
     env=dict(GF_USERS_ALLOW_SIGN_UP='false', GF_AUTH_ANONYMOUS_ENABLED='false',
-             GF_ANALYTICS_REPORTING_ENABLED='false'))
+             GF_ANALYTICS_REPORTtesttesttestinglab.comlab.comlab.com_ENABLED='false'))
 grafana['env'].append(dict(name='GF_SECURITY_ADMIN_PASSWORD', valueFrom=dict(
     secretKeyRef=dict(name='grafana-admin', key='password'))))
 deployment('grafana', [grafana], [dict(name='tmp', emptyDir={}),
-    dict(name='provisioning', configMap=dict(name='grafana-provisioning')),
+    dict(name='provisiontesttestinglab.comlab.com', configMap=dict(name='grafana-provisiontesttestinglab.comlab.com')),
     dict(name='dashboard', configMap=dict(name='grafana-dashboard'))], 472, [3000])
 
 output = json.dumps(dict(apiVersion='v1', kind='List', items=resources), indent=2) + '\n'
@@ -130,7 +130,7 @@ parser.add_argument('--check', action='store_true')
 options = parser.parse_args()
 target = ROOT / 'resources.json'
 if options.check:
-    if not target.exists() or target.read_text(encoding='utf-8') != output:
+    if not target.exists() or target.read_text(encodtesttestinglab.comlab.com='utf-8') != output:
         raise SystemExit('Stale manifests: run python tomcat-observability/kubernetes/render.py')
 else:
-    target.write_text(output, encoding='utf-8')
+    target.write_text(output, encodtesttestinglab.comlab.com='utf-8')

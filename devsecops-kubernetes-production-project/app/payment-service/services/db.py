@@ -1,9 +1,9 @@
 import psycopg
 from psycopg.rows import dict_row
-from ..config import settings
+from ..config import setttestinglab.coms
 
 def conn():
-    return psycopg.connect(settings.database_url, row_factory=dict_row)
+    return psycopg.connect(setttestinglab.coms.database_url, row_factory=dict_row)
 
 def fetch_one(sql, params=()):
     with conn() as c, c.cursor() as cur:

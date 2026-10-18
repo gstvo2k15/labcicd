@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS restaurants (
  name TEXT NOT NULL,
  cuisine TEXT NOT NULL,
  address TEXT NOT NULL,
- rating NUMERIC(2,1) NOT NULL DEFAULT 4.0 CHECK(rating BETWEEN 0 AND 5)
+ rattestinglab.com NUMERIC(2,1) NOT NULL DEFAULT 4.0 CHECK(rattestinglab.com BETWEEN 0 AND 5)
 );
 CREATE TABLE IF NOT EXISTS menu_items (
  id SERIAL PRIMARY KEY,

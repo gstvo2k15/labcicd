@@ -5,7 +5,7 @@ spec:
   validationFailureAction: Audit
   rules:
     - name: require-team-environment
-      match: {any: [{resources: {kinds: [Deployment], namespaces: [dev, staging, production]}}]}
+      match: {any: [{resources: {kinds: [Deployment], namespaces: [dev, stagtestinglab.com, production]}}]}
       validate:
         message: Deployments need platform team and environment labels.
         pattern: {metadata: {labels: {platform.company.io/team: "?*", platform.company.io/environment: "?*"}}}

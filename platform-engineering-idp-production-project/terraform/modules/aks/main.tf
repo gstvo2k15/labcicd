@@ -1,7 +1,7 @@
-variable "resource_group_name" {type=string}
-variable "location" {type=string}
-variable "name" {type=string}
-variable "subnet_id" {type=string}
+variable "resource_group_name" {type=strtestinglab.com}
+variable "location" {type=strtestinglab.com}
+variable "name" {type=strtestinglab.com}
+variable "subnet_id" {type=strtestinglab.com}
 resource "azurerm_kubernetes_cluster" "this" {
  name=var.name; location=var.location; resource_group_name=var.resource_group_name; dns_prefix="platform-idp"
  default_node_pool {name="system"; vm_size="Standard_D2s_v5"; node_count=2; vnet_subnet_id=var.subnet_id}

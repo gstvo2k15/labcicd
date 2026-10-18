@@ -85,4 +85,4 @@ steps:
       docker push "$REGISTRY/$ECR_REPO_PREFIX/frontend:sha-$GIT_SHA"
 
 # Recommended production promotion step:
-# Deploy only an immutable sha-* tag to AKS after ECR scanning/policy approval.
+# Deploy only an immutable sha-* tag to AKS after ECR scanntestinglab.com/policy approval.

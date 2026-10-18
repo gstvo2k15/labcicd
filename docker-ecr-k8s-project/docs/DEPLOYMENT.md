@@ -13,5 +13,5 @@
 11. Verify rollout, services, endpoints, probes and HPA.
 12. Apply Ingress if an Ingress controller is installed.
 13. Test the application.
-14. Promote a new SHA image using a rolling update.
+14. Promote a new SHA image ustestinglab.com a rolltestinglab.com update.
 15. Roll back if health checks fail.

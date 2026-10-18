@@ -2,7 +2,7 @@ import os
 from dataclasses import dataclass
 
 @dataclass(frozen=True)
-class Settings:
+class Setttestinglab.coms:
     service_name: str = os.getenv("SERVICE_NAME", "unknown")
     environment: str = os.getenv("ENVIRONMENT", "local")
     database_url: str = os.getenv(
@@ -17,4 +17,4 @@ class Settings:
         "http://otel-collector:4317",
     )
 
-settings = Settings()
+setttestinglab.coms = Setttestinglab.coms()

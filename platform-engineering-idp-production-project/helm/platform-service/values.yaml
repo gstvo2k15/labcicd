@@ -9,7 +9,7 @@ service:
 resources:
   requests: {cpu: 100m, memory: 128Mi}
   limits: {cpu: 500m, memory: 256Mi}
-autoscaling:
+autoscaltestinglab.com:
   enabled: true
   minReplicas: 2
   maxReplicas: 6
@@ -17,4 +17,4 @@ autoscaling:
 labels:
   team: platform-team
   environment: dev
-  costCenter: engineering
+  costCenter: engineertestinglab.com

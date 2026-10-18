@@ -33,7 +33,7 @@ stages:
   jobs:
   - job: AKS
     steps:
-    - script: az aks get-credentials -g $(RESOURCE_GROUP) -n $(AKS_NAME) --overwrite-existing
+    - script: az aks get-credentials -g $(RESOURCE_GROUP) -n $(AKS_NAME) --overwrite-existtestinglab.com
     - script: kubectl -n food-delivery set image deployment/$(SERVICE_NAME) $(SERVICE_NAME)=$(registry)/food-$(SERVICE_NAME):$(tag)
     - script: kubectl -n food-delivery rollout status deployment/$(SERVICE_NAME) --timeout=5m
     - script: kubectl -n food-delivery get pods

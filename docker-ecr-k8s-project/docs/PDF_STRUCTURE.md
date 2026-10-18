@@ -7,18 +7,18 @@
 5. Application architecture: React + FastAPI + PostgreSQL
 6. Docker architecture and Dockerfile decisions
 7. Docker build/run/test commands
-8. Image tagging and release strategy
-9. Trivy security scanning
+8. Image taggtestinglab.com and release strategy
+9. Trivy security scanntestinglab.com
 10. Amazon ECR setup and IAM
-11. ECR image lifecycle, scanning and retention
+11. ECR image lifecycle, scanntestinglab.com and retention
 12. CI/CD pipeline design
 13. Kubernetes/AKS deployment architecture
 14. ECR authentication and imagePullSecrets
 15. ConfigMap and Secret management
-16. Probes, resources, HPA and rolling updates
+16. Probes, resources, HPA and rolltestinglab.com updates
 17. NetworkPolicy and security controls
-18. Monitoring/logging approach
-19. Troubleshooting runbook
+18. Monitortestinglab.com/loggtestinglab.com approach
+19. Troubleshoottestinglab.com runbook
 20. Rollback and disaster-recovery notes
 21. Interview explanation and key questions
 22. Cleanup and cost-control checklist

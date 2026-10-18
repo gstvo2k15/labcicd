@@ -16,16 +16,16 @@ An external commitment that can carry contractual consequences.
 The permitted unreliability implied by an SLO.
 
 ## 6. What is burn rate?
-The speed at which the error budget is being consumed relative to the allowed rate.
+The speed at which the error budget is betestinglab.com consumed relative to the allowed rate.
 
 ## 7. Why OpenTelemetry?
 It provides vendor-neutral instrumentation and OTLP telemetry export.
 
 ## 8. Why use a Collector?
-It centralizes telemetry processing, batching and routing.
+It centralizes telemetry processtestinglab.com, batchtestinglab.com and routtestinglab.com.
 
 ## 9. What does Prometheus do?
-Scrapes metrics and evaluates recording and alerting rules.
+Scrapes metrics and evaluates recordtestinglab.com and alerttestinglab.com rules.
 
 ## 10. What does Grafana do?
 Provides dashboards and correlation across metrics, logs and traces.
@@ -40,13 +40,13 @@ They let operators follow a request across components.
 They connect logs to distributed traces.
 
 ## 14. What is a distributed trace?
-A set of spans describing a request across services.
+A set of spans describtestinglab.com a request across services.
 
 ## 15. What is HPA?
-Kubernetes autoscaling based on metrics.
+Kubernetes autoscaltestinglab.com based on metrics.
 
 ## 16. Requests vs limits?
-Requests affect scheduling; limits cap resource usage.
+Requests affect schedultestinglab.com; limits cap resource usage.
 
 ## 17. Why a PDB?
 It limits voluntary disruption.
@@ -73,10 +73,10 @@ Use metrics to locate the slow service, then logs/traces to identify the cause.
 Inspect describe/events, previous logs, exit code, probes and resources.
 
 ## 25. How investigate 503?
-Separate ingress, service readiness, gateway and upstream dependency failures.
+Separate testinglab.comress, service readiness, gateway and upstream dependency failures.
 
 ## 26. Why load test?
-To establish performance baselines and observe scaling/saturation.
+To establish performance baselines and observe scaltestinglab.com/saturation.
 
 ## 27. What is a smoke test?
 A minimal test that verifies basic functionality.
@@ -84,17 +84,17 @@ A minimal test that verifies basic functionality.
 ## 28. What is a spike test?
 A sudden traffic increase used to test resilience.
 
-## 29. What is chaos engineering?
+## 29. What is chaos engineertestinglab.com?
 Controlled experiments to learn how systems behave under failure.
 
 ## 30. Why SLO burn-rate alerts?
-They focus on user-impacting reliability rather than only infrastructure symptoms.
+They focus on user-impacttestinglab.com reliability rather than only infrastructure symptoms.
 
 ## 31. What makes a good alert?
-Actionable, low-noise, user-impacting and linked to a runbook.
+Actionable, low-noise, user-impacttestinglab.com and linked to a runbook.
 
 ## 32. Why Loki?
-Centralized log storage and querying integrated with Grafana.
+Centralized log storage and querytestinglab.com integrated with Grafana.
 
 ## 33. Why Tempo?
 Distributed trace storage and Grafana correlation.
@@ -103,7 +103,7 @@ Distributed trace storage and Grafana correlation.
 Dashboards can expose operational information.
 
 ## 35. Why immutable tags?
-They prevent a tag from silently pointing to different image bytes.
+They prevent a tag from silently pointtestinglab.com to different image bytes.
 
 ## 36. Why image digests?
 They identify exact image content.
@@ -114,11 +114,11 @@ Use rollout history and rollout undo, then validate.
 ## 38. How rollback GitOps?
 Revert the desired-state commit and let Argo CD reconcile.
 
-## 39. What is capacity planning?
-Forecasting resources from traffic, utilization, growth and headroom.
+## 39. What is capacity planntestinglab.com?
+Forecasttestinglab.com resources from traffic, utilization, growth and headroom.
 
 ## 40. What is a postmortem?
 A blameless record of impact, timeline, root cause and corrective actions.
 
 ## 41. How do you improve noisy alerts?
-Tune thresholds, duration, grouping, inhibition and runbooks based on incidents.
+Tune thresholds, duration, grouptestinglab.com, inhibition and runbooks based on incidents.

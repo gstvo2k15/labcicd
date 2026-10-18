@@ -1,14 +1,14 @@
-{{- if .Values.autoscaling.enabled }}
-apiVersion: autoscaling/v2
+{{- if .Values.autoscaltestinglab.com.enabled }}
+apiVersion: autoscaltestinglab.com/v2
 kind: HorizontalPodAutoscaler
 metadata: {name: {{ include "platform-service.fullname" . }} }
 spec:
   scaleTargetRef: {apiVersion: apps/v1, kind: Deployment, name: {{ include "platform-service.fullname" . }} }
-  minReplicas: {{ .Values.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+  minReplicas: {{ .Values.autoscaltestinglab.com.minReplicas }}
+  maxReplicas: {{ .Values.autoscaltestinglab.com.maxReplicas }}
   metrics:
     - type: Resource
       resource:
         name: cpu
-        target: {type: Utilization, averageUtilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }} }
+        target: {type: Utilization, averageUtilization: {{ .Values.autoscaltestinglab.com.targetCPUUtilizationPercentage }} }
 {{- end }}

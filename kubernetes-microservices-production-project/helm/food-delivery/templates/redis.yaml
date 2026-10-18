@@ -11,7 +11,7 @@ spec:
       - name: redis
         image: redis:7-alpine
         ports: [{containerPort: 6379}]
-        readinessProbe: {exec: {command: [redis-cli,ping]}}
+        readinessProbe: {exec: {command: [redis-cli,ptestinglab.com]}}
 ---
 apiVersion: v1
 kind: Service

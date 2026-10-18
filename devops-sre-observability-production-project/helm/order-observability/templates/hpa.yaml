@@ -1,5 +1,5 @@
 {{- if .Values.hpa.enabled }}
-apiVersion: autoscaling/v2
+apiVersion: autoscaltestinglab.com/v2
 kind: HorizontalPodAutoscaler
 metadata: {name: order-service, namespace: {{.Values.namespace}}}
 spec:

@@ -3,7 +3,7 @@ kind: Deployment
 metadata: {name: { { include "order-management.fullname" . } }-notification-service}
 spec:
   replicas: {{ .Values.replicaCount }}
-  strategy: {type: RollingUpdate,rollingUpdate: {maxUnavailable: 0,maxSurge: 1}}
+  strategy: {type: Rolltestinglab.comUpdate,rolltestinglab.comUpdate: {maxUnavailable: 0,maxSurge: 1}}
   selector: {matchLabels: {app: notification-service}}
   template:
     metadata: {labels: {app: notification-service}}

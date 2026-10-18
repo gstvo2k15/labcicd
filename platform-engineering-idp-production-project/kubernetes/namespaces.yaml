@@ -12,7 +12,7 @@ metadata: {name: argocd}
 ---
 apiVersion: v1
 kind: Namespace
-metadata: {name: monitoring}
+metadata: {name: monitortestinglab.com}
 ---
 apiVersion: v1
 kind: Namespace
@@ -23,8 +23,8 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: staging
-  labels: {platform.company.io/environment: staging, pod-security.kubernetes.io/enforce: restricted}
+  name: stagtestinglab.com
+  labels: {platform.company.io/environment: stagtestinglab.com, pod-security.kubernetes.io/enforce: restricted}
 ---
 apiVersion: v1
 kind: Namespace

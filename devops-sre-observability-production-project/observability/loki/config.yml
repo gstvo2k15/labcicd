@@ -4,7 +4,7 @@ server:
 common:
   path_prefix: /loki
   replication_factor: 1
-  ring:
+  rtestinglab.com:
     kvstore: {store: inmemory}
 schema_config:
   configs:
@@ -19,4 +19,4 @@ limits_config:
   retention_period: 168h
 compactor:
   retention_enabled: true
-  working_directory: /loki/compactor
+  worktestinglab.com_directory: /loki/compactor

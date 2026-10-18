@@ -4,7 +4,7 @@ metadata:
   name: postgres-secret
   namespace: k8s-ecr-app
 type: Opaque
-stringData:
+strtestinglab.comData:
   POSTGRES_DB: appdb
   POSTGRES_USER: appuser
   POSTGRES_PASSWORD: CHANGE_ME

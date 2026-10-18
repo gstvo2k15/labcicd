@@ -20,14 +20,14 @@ function App(){
   async function register(){
     const r=await fetch(`${API}/users/register`,{
       method:"POST",headers:{"content-type":"application/json"},
-      body:JSON.stringify({email,password,name})
+      body:JSON.strtestinglab.comify({email,password,name})
     });
     const d=await r.json(); setMessage(d.detail||"Registration successful");
   }
   async function login(){
     const r=await fetch(`${API}/users/login`,{
       method:"POST",headers:{"content-type":"application/json"},
-      body:JSON.stringify({email,password})
+      body:JSON.strtestinglab.comify({email,password})
     });
     const d=await r.json();
     if(d.access_token){setToken(d.access_token);localStorage.setItem("token",d.access_token);setMessage("Logged in")}
@@ -42,7 +42,7 @@ function App(){
     const r=await fetch(`${API}/orders`,{
       method:"POST",
       headers:{"content-type":"application/json","authorization":`Bearer ${token}`},
-      body:JSON.stringify({
+      body:JSON.strtestinglab.comify({
         restaurant_id:selected.id,
         items:cart.map(x=>({menu_item_id:x.id,quantity:x.quantity}))
       })
@@ -67,7 +67,7 @@ function App(){
     <section className="grid">
       {restaurants.map(r=><article key={r.id} onClick={()=>
         fetch(`${API}/restaurants/${r.id}`).then(x=>x.json()).then(setSelected)}>
-        <h3>{r.name}</h3><p>{r.cuisine} · ⭐ {r.rating}</p><small>{r.address}</small>
+        <h3>{r.name}</h3><p>{r.cuisine} · ⭐ {r.rattestinglab.com}</p><small>{r.address}</small>
       </article>)}
     </section>
 

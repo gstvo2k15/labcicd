@@ -26,7 +26,7 @@ def notify(payload: NotificationRequest):
     with db() as conn:
         return conn.execute(
             """INSERT INTO notifications(user_id,order_id,message,status)
-               VALUES(%s,%s,%s,'SENT') RETURNING *""",
+               VALUES(%s,%s,%s,'SENT') RETURNtesttestinglab.comlab.com *""",
             (payload.user_id,payload.order_id,payload.message),
         ).fetchone()
 

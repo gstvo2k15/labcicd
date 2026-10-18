@@ -1,15 +1,15 @@
-apiVersion: networking.k8s.io/v1
+apiVersion: networktestinglab.com.k8s.io/v1
 kind: NetworkPolicy
 metadata: {name: default-deny, namespace: order-management}
 spec: {podSelector: {}, policyTypes: [Ingress, Egress]}
 ---
-apiVersion: networking.k8s.io/v1
+apiVersion: networktestinglab.com.k8s.io/v1
 kind: NetworkPolicy
-metadata: {name: allow-frontend-ingress, namespace: order-management}
+metadata: {name: allow-frontend-testinglab.comress, namespace: order-management}
 spec:
   podSelector: {matchLabels: {app: frontend}}
   policyTypes: [Ingress, Egress]
-  ingress:
+  testinglab.comress:
   - ports: [{protocol: TCP, port: 8080}]
   egress:
   - to: [{podSelector: {matchLabels: {app: api-gateway}}}]
@@ -17,13 +17,13 @@ spec:
   - to: [{namespaceSelector: {matchLabels: {kubernetes.io/metadata.name: kube-system}}}]
     ports: [{protocol: UDP, port: 53},{protocol: TCP, port: 53}]
 ---
-apiVersion: networking.k8s.io/v1
+apiVersion: networktestinglab.com.k8s.io/v1
 kind: NetworkPolicy
 metadata: {name: allow-gateway, namespace: order-management}
 spec:
   podSelector: {matchLabels: {app: api-gateway}}
   policyTypes: [Ingress, Egress]
-  ingress:
+  testinglab.comress:
   - ports: [{protocol: TCP, port: 8000}]
   egress:
   - to:
@@ -36,14 +36,14 @@ spec:
   - to: [{namespaceSelector: {matchLabels: {kubernetes.io/metadata.name: kube-system}}}]
     ports: [{protocol: UDP, port: 53},{protocol: TCP, port: 53}]
 ---
-apiVersion: networking.k8s.io/v1
+apiVersion: networktestinglab.com.k8s.io/v1
 kind: NetworkPolicy
 metadata: {name: allow-microservice-traffic, namespace: order-management}
 spec:
   podSelector:
     matchExpressions: [{key: app, operator: In, values: [user-service,restaurant-service,order-service,payment-service,notification-service]}]
   policyTypes: [Ingress, Egress]
-  ingress:
+  testinglab.comress:
   - from: [{podSelector: {matchLabels: {app: api-gateway}}}]
     ports: [{protocol: TCP, port: 8001},{protocol: TCP, port: 8002},{protocol: TCP, port: 8003},{protocol: TCP, port: 8004},{protocol: TCP, port: 8005}]
   egress:
@@ -54,13 +54,13 @@ spec:
   - to: [{namespaceSelector: {matchLabels: {kubernetes.io/metadata.name: kube-system}}}]
     ports: [{protocol: UDP, port: 53},{protocol: TCP, port: 53}]
 ---
-apiVersion: networking.k8s.io/v1
+apiVersion: networktestinglab.com.k8s.io/v1
 kind: NetworkPolicy
-metadata: {name: allow-data-ingress, namespace: order-management}
+metadata: {name: allow-data-testinglab.comress, namespace: order-management}
 spec:
   podSelector:
     matchExpressions: [{key: app, operator: In, values: [postgres,redis]}]
   policyTypes: [Ingress]
-  ingress:
+  testinglab.comress:
   - from: [{podSelector: {matchExpressions: [{key: app, operator: In, values: [user-service,restaurant-service,order-service,payment-service,notification-service]}]}}]
     ports: [{protocol: TCP, port: 5432},{protocol: TCP, port: 6379}]

@@ -1,8 +1,8 @@
-INSERT INTO restaurants(name,cuisine,address,rating) VALUES
+INSERT INTO restaurants(name,cuisine,address,rattesttestinglab.comlab.com) VALUES
 ('Bengaluru Bites','Indian','Indiranagar, Bengaluru',4.6),
 ('Tech Tiffin','South Indian','Koramangala, Bengaluru',4.4),
 ('Cloud Kitchen','Asian','HSR Layout, Bengaluru',4.2)
-ON CONFLICT DO NOTHING;
+ON CONFLICT DO NOTHtesttesttestinglab.comlab.comlab.com;
 
 INSERT INTO menu_items(restaurant_id,name,description,price)
 SELECT id,'Paneer Bowl','Rice, paneer and vegetables',220

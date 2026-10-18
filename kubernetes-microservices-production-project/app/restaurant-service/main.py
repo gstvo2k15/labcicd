@@ -10,7 +10,7 @@ def health(): return {'status':'ok','service':'restaurant-service'}
 def ready():
  try:
   with psycopg.connect(DB,connect_timeout=2) as c:c.execute('select 1')
-  Redis.from_url(REDIS).ping(); return {'status':'ready'}
+  Redis.from_url(REDIS).ptestinglab.com(); return {'status':'ready'}
  except Exception as e: raise HTTPException(503,str(e))
 @app.get('/api/restaurants')
 def restaurants():

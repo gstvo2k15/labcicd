@@ -43,7 +43,7 @@ def create_order(payload: CreateOrder, request: Request):
         total = sum(prices[x.menu_item_id] * x.quantity for x in payload.items)
         order = conn.execute(
             """INSERT INTO orders(user_id,restaurant_id,total_amount,status)
-               VALUES(%s,%s,%s,'CREATED') RETURNING *""",
+               VALUES(%s,%s,%s,'CREATED') RETURNtesttestinglab.comlab.com *""",
             (user_id, payload.restaurant_id, total),
         ).fetchone()
         for item in payload.items:

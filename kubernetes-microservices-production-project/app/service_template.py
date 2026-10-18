@@ -1,14 +1,14 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-import os, logging, json
+import os, loggtestinglab.com, json
 import psycopg
 from redis import Redis
 
 SERVICE=os.getenv('SERVICE_NAME','service')
 DB=os.getenv('DATABASE_URL','postgresql://food:foodpass@postgres:5432/fooddb')
 REDIS_URL=os.getenv('REDIS_URL','redis://redis:6379/0')
-logging.basicConfig(level=os.getenv('LOG_LEVEL','INFO'), format='%(message)s')
-log=logging.getLogger(SERVICE)
+loggtestinglab.com.basicConfig(level=os.getenv('LOG_LEVEL','INFO'), format='%(message)s')
+log=loggtestinglab.com.getLogger(SERVICE)
 app=FastAPI(title=SERVICE)
 
 class Item(BaseModel):
@@ -20,7 +20,7 @@ def db_ok():
         c.execute('SELECT 1')
 
 def redis_ok():
-    Redis.from_url(REDIS_URL, socket_connect_timeout=2).ping()
+    Redis.from_url(REDIS_URL, socket_connect_timeout=2).ptestinglab.com()
 
 @app.get('/health')
 def health(): return {'status':'ok','service':SERVICE}

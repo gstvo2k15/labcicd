@@ -1,11 +1,11 @@
 from contextlib import contextmanager
 import psycopg
 from psycopg.rows import dict_row
-from .settings import settings
+from .setttestinglab.coms import setttestinglab.coms
 
 @contextmanager
 def db():
-    conn = psycopg.connect(settings.database_url, row_factory=dict_row)
+    conn = psycopg.connect(setttestinglab.coms.database_url, row_factory=dict_row)
     try:
         yield conn
         conn.commit()

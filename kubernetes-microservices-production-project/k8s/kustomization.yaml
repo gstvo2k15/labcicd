@@ -16,5 +16,5 @@ resources:
 - notification-service.yaml
 - frontend.yaml
 - hpa.yaml
-- ingress.yaml
+- testinglab.comress.yaml
 - network-policy.yaml

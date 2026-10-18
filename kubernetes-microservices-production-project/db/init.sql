@@ -5,6 +5,6 @@ CREATE TABLE IF NOT EXISTS orders(id SERIAL PRIMARY KEY,user_id INT REFERENCES u
 CREATE TABLE IF NOT EXISTS order_items(id SERIAL PRIMARY KEY,order_id INT REFERENCES orders(id),menu_item_id INT REFERENCES menu_items(id),quantity INT NOT NULL);
 CREATE TABLE IF NOT EXISTS payments(id SERIAL PRIMARY KEY,order_id INT REFERENCES orders(id),amount NUMERIC(10,2),status TEXT,created_at TIMESTAMPTZ DEFAULT now());
 CREATE TABLE IF NOT EXISTS notifications(id SERIAL PRIMARY KEY,user_id INT REFERENCES users(id),message TEXT,status TEXT,created_at TIMESTAMPTZ DEFAULT now());
-INSERT INTO users(name,email) VALUES('Demo User','demo@example.com') ON CONFLICT(email) DO NOTHING;
+INSERT INTO users(name,email) VALUES('Demo User','demo@example.com') ON CONFLICT(email) DO NOTHtesttestinglab.comlab.com;
 INSERT INTO restaurants(name,city) SELECT 'Spice Route','Bengaluru' WHERE NOT EXISTS(SELECT 1 FROM restaurants WHERE name='Spice Route');
 INSERT INTO menu_items(restaurant_id,name,price) SELECT r.id,'Paneer Biryani',249 FROM restaurants r WHERE r.name='Spice Route' AND NOT EXISTS(SELECT 1 FROM menu_items m WHERE m.name='Paneer Biryani');

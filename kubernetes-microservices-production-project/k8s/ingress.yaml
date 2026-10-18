@@ -1,11 +1,11 @@
-apiVersion: networking.k8s.io/v1
+apiVersion: networktestinglab.com.k8s.io/v1
 kind: Ingress
 metadata:
   name: food-delivery
   namespace: food-delivery
-  annotations: {nginx.ingress.kubernetes.io/proxy-body-size: 2m}
+  annotations: {nginx.testinglab.comress.kubernetes.io/proxy-body-size: 2m}
 spec:
-  ingressClassName: nginx
+  testinglab.comressClassName: nginx
   rules:
   - host: food.example.com
     http:

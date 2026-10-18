@@ -11,9 +11,9 @@ spec:
     - title: Service information
       required: [name, owner, environment]
       properties:
-        name: {title: Service name, type: string, pattern: '^[a-z0-9-]+$'}
-        owner: {title: Owner, type: string, default: orders-team}
-        environment: {title: Environment, type: string, enum: [dev, staging, production], default: dev}
+        name: {title: Service name, type: strtestinglab.com, pattern: '^[a-z0-9-]+$'}
+        owner: {title: Owner, type: strtestinglab.com, default: orders-team}
+        environment: {title: Environment, type: strtestinglab.com, enum: [dev, stagtestinglab.com, production], default: dev}
   steps:
     - id: fetch
       name: Fetch skeleton

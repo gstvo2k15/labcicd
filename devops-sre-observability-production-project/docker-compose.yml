@@ -19,7 +19,7 @@ services:
     image: redis:7-alpine
     volumes: [redisdata:/data]
     healthcheck:
-      test: ["CMD","redis-cli","ping"]
+      test: ["CMD","redis-cli","ptestinglab.com"]
       interval: 5s
       timeout: 2s
       retries: 10
@@ -160,7 +160,7 @@ services:
       GF_AUTH_ANONYMOUS_ENABLED: "false"
     volumes:
       - grafanadata:/var/lib/grafana
-      - ./observability/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./observability/grafana/provisiontestinglab.com:/etc/grafana/provisiontestinglab.com:ro
       - ./observability/grafana/dashboards:/var/lib/grafana/dashboards:ro
     ports: ["3000:3000"]
 

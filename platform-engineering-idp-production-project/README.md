@@ -1,6 +1,6 @@
-# REAL-TIME DEVOPS PLATFORM ENGINEERING — INTERNAL DEVELOPER PLATFORM
+# REAL-TIME DEVOPS PLATFORM ENGINEERtesttesttestinglab.comlab.comlab.com — INTERNAL DEVELOPER PLATFORM
 
-A hands-on, GitHub-ready Platform Engineering project for an Order Management organization. The platform provides reusable **Golden Paths** so developers can create, secure, build, deploy, observe and operate services without repeating low-level Kubernetes/Azure work.
+A hands-on, GitHub-ready Platform Engineertesttestinglab.comlab.com project for an Order Management organization. The platform provides reusable **Golden Paths** so developers can create, secure, build, deploy, observe and operate services without repeattesttestinglab.comlab.com low-level Kubernetes/Azure work.
 
 ## 1. What you build
 
@@ -31,15 +31,15 @@ Prometheus / Grafana / Loki / Tempo / OpenTelemetry
 ## 2. Repository structure
 
 ```text
-platform-engineering-idp/
+platform-engineertesttestinglab.comlab.com-idp/
 ├── backstage/                 # portal config, catalog and template
 ├── templates/                 # Golden Path starter docs/skeleton
 ├── platform-api/              # real FastAPI automation API
 ├── app/order-service/         # real runnable example service
 ├── helm/platform-service/     # reusable Helm Golden Chart
 ├── kubernetes/                # namespaces, quotas, RBAC, network policy
-├── gitops/                    # dev/staging/prod desired state + Argo app
-├── terraform/                 # Azure modules for RG/VNet/AKS/ACR/monitoring
+├── gitops/                    # dev/stagtesttestinglab.comlab.com/prod desired state + Argo app
+├── terraform/                 # Azure modules for RG/VNet/AKS/ACR/monitortesttestinglab.comlab.com
 ├── pipelines/                 # reusable GitHub/Azure pipeline examples
 ├── security/                  # Semgrep/Gitleaks/security baseline
 ├── policy/kyverno/            # admission guardrails
@@ -64,7 +64,7 @@ Azure/Kubernetes:
 - Helm 3
 - an Azure subscription
 
-Optional security tooling:
+Optional security tooltesttestinglab.comlab.com:
 - Trivy
 - Syft
 - Gitleaks
@@ -76,8 +76,8 @@ Optional security tooling:
 ### Step 1: start the real Platform API and Order Service
 
 ```bash
-git clone <your-repository-url> platform-engineering-idp
-cd platform-engineering-idp
+git clone <your-repository-url> platform-engineertesttestinglab.comlab.com-idp
+cd platform-engineertesttestinglab.comlab.com-idp
 cp .env.example .env
 docker compose build
 docker compose up -d
@@ -181,7 +181,7 @@ Choose template
 → Backstage shows ownership and operational links
 ```
 
-The goal is **self-service with guardrails**, not giving every developer cluster-admin access.
+The goal is **self-service with guardrails**, not givtesttestinglab.comlab.com every developer cluster-admin access.
 
 ## 7. Backstage practice
 
@@ -216,7 +216,7 @@ repository
 environment
 ```
 
-and demonstrates generation of catalog metadata, CI and deployment scaffolding.
+and demonstrates generation of catalog metadata, CI and deployment scaffoldtesttestinglab.comlab.com.
 
 > Real GitHub repository creation requires a GitHub integration/token configured in Backstage. Never commit that token.
 
@@ -247,7 +247,7 @@ kubectl rollout status deployment/order-service -n dev
 
 ## 9. Kubernetes platform foundation
 
-Review manifests before applying:
+Review manifests before applytesttestinglab.comlab.com:
 
 ```bash
 kubectl apply -f kubernetes/namespaces.yaml
@@ -344,7 +344,7 @@ The desired state lives in `gitops/`:
 ```text
 gitops/
 ├── environments/dev/order-service/values.yaml
-├── environments/staging/order-service/values.yaml
+├── environments/stagtesttestinglab.comlab.com/order-service/values.yaml
 ├── environments/production/order-service/values.yaml
 └── applications/order-service-dev.yaml
 ```
@@ -361,7 +361,7 @@ argocd app sync order-service-dev
 Promotion:
 
 ```text
-DEV → smoke tests → STAGING → integration tests → approval → PRODUCTION
+DEV → smoke tests → STAGtesttesttestinglab.comlab.comlab.com → integration tests → approval → PRODUCTION
 ```
 
 ## 14. Reusable CI / DevSecOps
@@ -382,8 +382,8 @@ Extend it in your environment with:
 - Semgrep/SonarQube
 - pip-audit/npm audit
 - Syft SBOM
-- Cosign signing
-- ACR push using OIDC/workload identity
+- Cosign signtesttestinglab.comlab.com
+- ACR push ustesttestinglab.comlab.com OIDC/workload identity
 - GitOps PR/update
 
 Azure DevOps starter:
@@ -452,12 +452,12 @@ Create `inventory-team` and set:
 ```yaml
 platform.company.io/team: inventory-team
 platform.company.io/environment: dev
-platform.company.io/cost-center: engineering
+platform.company.io/cost-center: engineertesttestinglab.comlab.com
 ```
 
 ### Exercise C — policy
 
-Change Kyverno to require `platform.company.io/cost-center` in staging/production.
+Change Kyverno to require `platform.company.io/cost-center` in stagtesttestinglab.comlab.com/production.
 
 ### Exercise D — self-service
 
@@ -477,7 +477,7 @@ Extend the Golden Chart with canary or blue/green support.
 
 Add OpenCost and map costs by namespace/team/environment.
 
-## 18. Troubleshooting
+## 18. Troubleshoottesttestinglab.comlab.com
 
 ### Backstage unavailable
 
@@ -548,7 +548,7 @@ Azure infrastructure → AKS → GitOps → Argo CD → secrets → workloads �
 
 ## 21. Interview explanation
 
-> I built an Internal Developer Platform using Backstage, reusable Golden Path templates, Terraform Azure modules, a standard Helm chart, reusable CI security controls, GitOps with Argo CD, Kyverno admission guardrails, service ownership metadata and observability integrations. Developers use self-service workflows while the platform team owns the standards, guardrails and runtime platform.
+> I built an Internal Developer Platform ustesttestinglab.comlab.com Backstage, reusable Golden Path templates, Terraform Azure modules, a standard Helm chart, reusable CI security controls, GitOps with Argo CD, Kyverno admission guardrails, service ownership metadata and observability integrations. Developers use self-service workflows while the platform team owns the standards, guardrails and runtime platform.
 
 ## 22. Security rules
 
@@ -557,6 +557,6 @@ Never commit:
 - cloud credentials
 - private keys
 - kubeconfigs
-- Terraform state containing secrets
+- Terraform state containtesttestinglab.comlab.com secrets
 
 Use Azure Workload Identity/OIDC and Key Vault for real environments.

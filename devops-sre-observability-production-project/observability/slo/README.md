@@ -25,4 +25,4 @@ histogram_quantile(
 )
 ```
 
-A 99.9% SLO permits a 0.1% failure fraction. Burn-rate alerting compares observed failure against the sustainable SLO failure rate.
+A 99.9% SLO permits a 0.1% failure fraction. Burn-rate alerttesttestinglab.comlab.compares observed failure against the sustainable SLO failure rate.

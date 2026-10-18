@@ -11,7 +11,7 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v4
-      # Configure AWS credentials with GitHub OIDC in the repository settings.
+      # Configure AWS credentials with GitHub OIDC in the repository setttestinglab.coms.
       - uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: us-east-1

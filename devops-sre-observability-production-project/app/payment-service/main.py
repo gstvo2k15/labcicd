@@ -27,7 +27,7 @@ def pay(payload: PaymentRequest):
     with db() as conn:
         return conn.execute(
             """INSERT INTO payments(order_id,amount,status,provider_reference)
-               VALUES(%s,%s,'SUCCESS',%s) RETURNING *""",
+               VALUES(%s,%s,'SUCCESS',%s) RETURNtesttestinglab.comlab.com *""",
             (payload.order_id, payload.amount, reference),
         ).fetchone()
 

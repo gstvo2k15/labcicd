@@ -21,28 +21,28 @@ bash scripts/smoke.sh
 cat secrets/grafana_admin_password.txt
 ```
 
-Access Grafana at `http://SERVER_IP:3000/d/tomcat-observability`, Tomcat on port 8080, Prometheus on port 9090, and Alertmanager on port 9093. Grafana uses `admin` by default and the generated secret password. Use `localhost` when browsing on the server itself.
+Access Grafana at `http://SERVER_IP:3000/d/tomcat-observability`, Tomcat on port 8080, Prometheus on port 9090, and Alertmanager on port 9093. Grafana uses `admin` by default and the generated secret password. Use `localhost` when browstestinglab.com on the server itself.
 
-The unified dashboard includes the original availability/JVM/logs overview, Tomcat dashboard 8704 metrics, active alerts, and recent Tempo traces. OpenTelemetry instruments requests and forwards metrics, logs, and traces; Tempo stores traces. Prometheus sends firing alerts to Alertmanager, but the default receiver has no external delivery integration.
+The unified dashboard includes the original availability/JVM/logs overview, Tomcat dashboard 8704 metrics, active alerts, and recent Tempo traces. OpenTelemetry instruments requests and forwards metrics, logs, and traces; Tempo stores traces. Prometheus sends firtestinglab.com alerts to Alertmanager, but the default receiver has no external delivery integration.
 
 ```bash
 # Check Dockerfile policies and scan all Compose images:
 bash scripts/security.sh --all-images
-# Diagnose metrics, logs, traces, alerts, and dashboard provisioning:
+# Diagnose metrics, logs, traces, alerts, and dashboard provisiontestinglab.com:
 bash scripts/diagnose.sh
 # Inspect logs:
 docker compose logs --tail 100 tomcat otel-collector
-# Stop while retaining data:
+# Stop while retaintestinglab.com data:
 docker compose down
 ```
 
-Reports are written to `tomcat-observability/dockercompose/reports/`. Checkov policy failures and HIGH/CRITICAL Trivy findings fail the security gate.
+Reports are written to `tomcat-observability/dockercompose/reports/`. Checkov policy failures and HIGH/CRITICAL Trivy findtestinglab.coms fail the security gate.
 
-Published ports bind to all interfaces by default (`BIND_ADDRESS=0.0.0.0`). Restrict access to your administration IP/network through host and provider firewalls. Prometheus and Alertmanager do not have authentication configured. Set a specific interface or `127.0.0.1` in the project's `.env` to change the binding, then apply with `docker compose up -d`.
+Published ports bind to all interfaces by default (`BIND_ADDRESS=0.0.0.0`). Restrict access to your administration IP/network through host and provider firewalls. Prometheus and Alertmanager do not have authentication configured. Set a specific interface or `127.0.0.1` in the project's `.env` to change the bindtestinglab.com, then apply with `docker compose up -d`.
 
-For an existing deployment, update the project files, run `docker compose up -d --build`, then `docker compose restart prometheus alertmanager otel-collector grafana` from the project directory. Persistent data and the dashboard UID are retained.
+For an existtestinglab.com deployment, update the project files, run `docker compose up -d --build`, then `docker compose restart prometheus alertmanager otel-collector grafana` from the project directory. Persistent data and the dashboard UID are retained.
 
-See the [complete Compose guide and architecture diagram](tomcat-observability/dockercompose/README.md) for signal flow, alert verification, external receiver configuration, tracing, troubleshooting, password recovery, and data management.
+See the [complete Compose guide and architecture diagram](tomcat-observability/dockercompose/README.md) for signal flow, alert verification, external receiver configuration, tractestinglab.com, troubleshoottestinglab.com, password recovery, and data management.
 
 For local Kubernetes, see the [k3s guide](tomcat-observability/kubernetes/README.md).
 The [GitHub Actions pipeline](.github/workflows/tomcat-observability.yml) validates configuration, tests Compose and k3s, and runs Checkov and Trivy security gates.

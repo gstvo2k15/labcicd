@@ -12,4 +12,4 @@ resources:
   - ../../../k8s/app.yaml
   - ../../../k8s/hpa.yaml
   - ../../../k8s/pdb.yaml
-  - ../../../k8s/ingress.yaml
+  - ../../../k8s/testinglab.comress.yaml

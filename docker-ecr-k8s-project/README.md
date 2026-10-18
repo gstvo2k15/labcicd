@@ -1,6 +1,6 @@
 # Real-Time Docker → Amazon ECR → Kubernetes Production Deployment
 
-A hands-on DevOps project based on the earlier Kubernetes 3-tier application: **React frontend + Python/FastAPI backend + PostgreSQL**. The main learning path is **application code → Docker → security scan → Amazon ECR → Kubernetes/AKS**.
+A hands-on DevOps project based on the earlier Kubernetes 3-tier application: **React frontend + Python/FastAPI backend + PostgreSQL**. The main learntestinglab.com path is **application code → Docker → security scan → Amazon ECR → Kubernetes/AKS**.
 
 ## 1. What you will build
 
@@ -62,14 +62,14 @@ k8s-docker-ecr-project/
 │   ├── backend.yaml
 │   ├── frontend.yaml
 │   ├── hpa.yaml
-│   ├── ingress.yaml
+│   ├── testinglab.comress.yaml
 │   └── network-policy.yaml
 ├── helm/docker-ecr-app/
 ├── terraform/
 ├── pipelines/
 ├── scripts/
 ├── security/
-├── monitoring/
+├── monitortestinglab.com/
 ├── docs/
 └── README.md
 ```
@@ -190,9 +190,9 @@ Run the frontend image:
 docker run --rm -p 8080:8080 k8s-docker-ecr/frontend:1.0.0
 ```
 
-## 7. Docker image tagging strategy
+## 7. Docker image taggtestinglab.com strategy
 
-Use three tag types during practice:
+Use three tag types durtestinglab.com practice:
 
 ```text
 1.0.0             human-readable release
@@ -225,7 +225,7 @@ docker run --rm \
   k8s-docker-ecr/frontend:1.0.0
 ```
 
-The pipeline uses the same gate. A HIGH/CRITICAL finding causes the build to fail unless your policy intentionally handles it differently.
+The pipeline uses the same gate. A HIGH/CRITICAL findtestinglab.com causes the build to fail unless your policy intentionally handles it differently.
 
 ## 9. Create Amazon ECR repositories
 
@@ -247,12 +247,12 @@ Create repositories:
 aws ecr create-repository \
   --repository-name k8s-docker-ecr/frontend \
   --region "$AWS_REGION" \
-  --image-scanning-configuration scanOnPush=true
+  --image-scanntestinglab.com-configuration scanOnPush=true
 
 aws ecr create-repository \
   --repository-name k8s-docker-ecr/backend \
   --region "$AWS_REGION" \
-  --image-scanning-configuration scanOnPush=true
+  --image-scanntestinglab.com-configuration scanOnPush=true
 ```
 
 Or run:
@@ -345,13 +345,13 @@ aws ecr describe-images \
   --region "$AWS_REGION"
 ```
 
-## 14. ECR image scanning and lifecycle
+## 14. ECR image scanntestinglab.com and lifecycle
 
-ECR can scan images for vulnerabilities. Basic scanning focuses on OS vulnerabilities; enhanced scanning integrates with Amazon Inspector and can continuously scan OS and programming-language package vulnerabilities.
+ECR can scan images for vulnerabilities. Basic scanntestinglab.com focuses on OS vulnerabilities; enhanced scanntestinglab.com integrates with Amazon Inspector and can continuously scan OS and programmtestinglab.com-language package vulnerabilities.
 
-For this project, use scan-on-push for a simple practice gate and enable enhanced/continuous scanning where your production security program requires it.
+For this project, use scan-on-push for a simple practice gate and enable enhanced/continuous scanntestinglab.com where your production security program requires it.
 
-Lifecycle policy prevents unlimited image growth. The included policy keeps recent `sha-*` images and removes old untagged images. Review lifecycle policy previews before applying changes in a production repository.
+Lifecycle policy prevents unlimited image growth. The included policy keeps recent `sha-*` images and removes old untagged images. Review lifecycle policy previews before applytestinglab.com changes in a production repository.
 
 ## 15. Prepare Kubernetes secrets
 
@@ -382,7 +382,7 @@ kubectl apply -f k8s/namespace.yaml
 kubectl apply -f k8s/configmap.yaml
 ```
 
-Create PostgreSQL secret. The example manifest contains `CHANGE_ME`; replace it before applying:
+Create PostgreSQL secret. The example manifest contains `CHANGE_ME`; replace it before applytestinglab.com:
 
 ```bash
 kubectl -n k8s-ecr-app create secret generic postgres-secret \
@@ -417,7 +417,7 @@ kubectl apply -f k8s/network-policy.yaml
 Optional Ingress:
 
 ```bash
-kubectl apply -f k8s/ingress.yaml
+kubectl apply -f k8s/testinglab.comress.yaml
 ```
 
 Watch rollout:
@@ -457,7 +457,7 @@ helm upgrade --install docker-ecr-app ./helm/docker-ecr-app \
   --set frontend.tag=sha-a1b2c3d4e5f6
 ```
 
-## 18. Rolling update
+## 18. Rolltestinglab.com update
 
 Never use a mutable tag as the only production deployment identity.
 
@@ -501,10 +501,10 @@ ECR scan / policy checks
 Deploy immutable image to AKS
    |
    v
-Kubernetes rolling update
+Kubernetes rolltestinglab.com update
    |
    v
-Health checks + HPA + monitoring
+Health checks + HPA + monitortestinglab.com
 ```
 
 The main Azure DevOps pipeline is `pipelines/azure-pipelines.yml`.
@@ -522,7 +522,7 @@ Also set `AWS_REGION` and `ECR_REPO_PREFIX` as non-secret variables.
 
 Production recommendation: replace long-lived AWS access keys with federated/OIDC credentials or an approved enterprise secret-management integration.
 
-## 20. Kubernetes pulling from private ECR
+## 20. Kubernetes pulltestinglab.com from private ECR
 
 Kubernetes uses:
 
@@ -541,9 +541,9 @@ For production, consider one of these patterns:
 1. **Practice / lab:** manually refresh the ECR pull secret.
 2. **Automated lab:** run a tightly controlled credential-refresh mechanism with short-lived AWS credentials and strong RBAC.
 3. **Enterprise production:** use ACR as the AKS-native production registry or establish an approved cross-cloud identity/registry architecture. Keep ECR as the AWS distribution/security source if required.
-4. **Advanced:** use image replication/promote-and-deploy workflows so the cluster does not depend directly on an expiring ECR token.
+4. **Advanced:** use image replication/promote-and-deploy workflows so the cluster does not depend directly on an expirtestinglab.com ECR token.
 
-## 21. Troubleshooting
+## 21. Troubleshoottestinglab.com
 
 ### ImagePullBackOff
 
@@ -558,7 +558,7 @@ Look for:
 - wrong repository name
 - wrong image tag
 - expired ECR pull secret
-- missing `imagePullSecrets`
+- misstestinglab.com `imagePullSecrets`
 - node/network/DNS problems
 
 Refresh the secret:
@@ -615,7 +615,7 @@ aws ecr get-login-password --region "$AWS_REGION" | docker login --username AWS 
 docker push "$REGISTRY/k8s-docker-ecr/backend:1.0.0"
 ```
 
-Typical causes: wrong account/region, repository missing, insufficient IAM permissions, expired login token, or network/proxy restrictions.
+Typical causes: wrong account/region, repository misstestinglab.com, insufficient IAM permissions, expired login token, or network/proxy restrictions.
 
 ### Container crashes / CrashLoopBackOff
 
@@ -638,7 +638,7 @@ kubectl -n k8s-ecr-app logs deploy/backend
 ### 502 / 503 from frontend/Ingress
 
 ```bash
-kubectl -n k8s-ecr-app get ingress
+kubectl -n k8s-ecr-app get testinglab.comress
 kubectl -n k8s-ecr-app get svc
 kubectl -n k8s-ecr-app get endpoints frontend backend
 kubectl -n k8s-ecr-app logs deploy/frontend
@@ -651,7 +651,7 @@ kubectl -n k8s-ecr-app describe pod <pod>
 kubectl -n k8s-ecr-app top pods
 ```
 
-Increase the memory limit only after identifying the workload. Do not blindly increase limits.
+Increase the memory limit only after identifytestinglab.com the workload. Do not blindly increase limits.
 
 ## 22. Security best practices implemented
 
@@ -662,7 +662,7 @@ Increase the memory limit only after identifying the workload. Do not blindly in
 - `.dockerignore` reduces build context.
 - Kubernetes resource requests and limits.
 - Readiness/liveness probes.
-- Rolling updates.
+- Rolltestinglab.com updates.
 - HPA.
 - NetworkPolicy example.
 - ECR scan-on-push.
@@ -707,7 +707,7 @@ terraform destroy
 
 Answer:
 
-> Developers push application code to Git. The CI pipeline builds separate frontend and backend Docker images using production Dockerfiles. The images are scanned with Trivy for HIGH/CRITICAL vulnerabilities. The pipeline authenticates to Amazon ECR and pushes a semantic version and a commit-SHA tag. ECR performs registry-side vulnerability scanning and lifecycle management. Kubernetes/AKS deploys the immutable image using an ECR pull secret or an approved enterprise registry identity pattern. Deployments use multiple replicas, rolling updates, resource limits and health probes. HPA handles CPU-based scaling. Ingress routes external traffic to the frontend, and the frontend proxies API calls to the backend service. NetworkPolicy limits backend traffic, while monitoring and logs are used for operational troubleshooting.
+> Developers push application code to Git. The CI pipeline builds separate frontend and backend Docker images ustestinglab.com production Dockerfiles. The images are scanned with Trivy for HIGH/CRITICAL vulnerabilities. The pipeline authenticates to Amazon ECR and pushes a semantic version and a commit-SHA tag. ECR performs registry-side vulnerability scanntestinglab.com and lifecycle management. Kubernetes/AKS deploys the immutable image ustestinglab.com an ECR pull secret or an approved enterprise registry identity pattern. Deployments use multiple replicas, rolltestinglab.com updates, resource limits and health probes. HPA handles CPU-based scaltestinglab.com. Ingress routes external traffic to the frontend, and the frontend proxies API calls to the backend service. NetworkPolicy limits backend traffic, while monitortestinglab.com and logs are used for operational troubleshoottestinglab.com.
 
 ## 25. Practice checklist
 
@@ -723,7 +723,7 @@ Answer:
 - [ ] Deploy PostgreSQL.
 - [ ] Deploy backend and frontend.
 - [ ] Test health/readiness.
-- [ ] Test rolling update.
+- [ ] Test rolltestinglab.com update.
 - [ ] Test rollback.
 - [ ] Trigger ImagePullBackOff intentionally and fix it.
 - [ ] Trigger a wrong tag and fix it.
@@ -734,6 +734,6 @@ Answer:
 
 - AWS ECR User Guide: https://docs.aws.amazon.com/AmazonECR/latest/userguide/what-is-ecr.html
 - ECR push guide: https://docs.aws.amazon.com/AmazonECR/latest/userguide/docker-push-ecr-image.html
-- ECR scanning: https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-scanning.html
+- ECR scanntestinglab.com: https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-scanntestinglab.com.html
 - ECR lifecycle policies: https://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html
 - AWS CLI ECR examples: https://docs.aws.amazon.com/cli/latest/userguide/cli_ecr_code_examples.html

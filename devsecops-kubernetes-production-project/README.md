@@ -1,12 +1,12 @@
 # REAL-TIME DEVSECOPS KUBERNETES — ORDER MANAGEMENT PRODUCTION PROJECT
 
-A complete learning and portfolio project that extends the previous Kubernetes microservices + Docker/registry + GitOps/Argo CD work into an end-to-end DevSecOps implementation.
+A complete learntesttestinglab.comlab.com and portfolio project that extends the previous Kubernetes microservices + Docker/registry + GitOps/Argo CD work into an end-to-end DevSecOps implementation.
 
 ## What you build
-Developer → GitHub PR → tests → SAST → dependency scan → Gitleaks → Docker → Trivy → SBOM → Cosign → Azure Container Registry → GitOps repo → Argo CD → Azure AKS → Kyverno policies → monitoring/logging.
+Developer → GitHub PR → tests → SAST → dependency scan → Gitleaks → Docker → Trivy → SBOM → Cosign → Azure Container Registry → GitOps repo → Argo CD → Azure AKS → Kyverno policies → monitortesttestinglab.comlab.com/loggtesttestinglab.comlab.com.
 
 ## Two repositories
-**Application repository** contains source code, tests, Dockerfiles and CI. **GitOps repository** contains the desired deployment state. This separation limits who/what can change runtime configuration and gives Argo CD a single declarative source of truth.
+**Application repository** contains source code, tests, Dockerfiles and CI. **GitOps repository** contains the desired deployment state. This separation limits who/what can change runtime configuration and gives Argo CD a stesttestinglab.comlab.comle declarative source of truth.
 
 ## Application
 React frontend + FastAPI API gateway + User, Restaurant, Order, Payment and Notification services + PostgreSQL + Redis.
@@ -86,7 +86,7 @@ cosign generate-key-pair
 cosign sign --key cosign.key order-management/user-service:1.0.0
 cosign verify --key cosign.pub order-management/user-service:1.0.0
 ```
-For CI, prefer keyless/OIDC signing and verify against the exact identity/issuer policy used by your organization.
+For CI, prefer keyless/OIDC signtesttestinglab.comlab.com and verify against the exact identity/issuer policy used by your organization.
 
 ## 7. Azure Container Registry
 ```bash
@@ -119,7 +119,7 @@ terraform destroy
 ```
 
 ## 9. Key Vault + Workload Identity
-The Terraform module enables AKS OIDC/Workload Identity and provisions Key Vault. Install the Azure Key Vault CSI provider according to your cluster standard, create the federated identity mapping for the workload ServiceAccount, then apply `k8s/secretproviderclass.example.yaml`. Do not commit actual secret values.
+The Terraform module enables AKS OIDC/Workload Identity and provisions Key Vault. Install the Azure Key Vault CSI provider accordtesttestinglab.comlab.com to your cluster standard, create the federated identity mapptesttestinglab.comlab.com for the workload ServiceAccount, then apply `k8s/secretproviderclass.example.yaml`. Do not commit actual secret values.
 
 ## 10. Kubernetes deployment
 Create the secret from a secure source:
@@ -132,7 +132,7 @@ Apply:
 kubectl apply -f k8s/
 kubectl -n order-management get pods
 kubectl -n order-management get svc
-kubectl -n order-management get ingress
+kubectl -n order-management get testtestinglab.comlab.comress
 ```
 Replace `ACR_NAME.azurecr.io` with your registry or use the Helm values. If AKS is attached to the same ACR, grant AcrPull to the AKS kubelet identity (Terraform does this). For a different registry/identity architecture, use an approved pull credential mechanism.
 
@@ -154,15 +154,15 @@ kubectl -n argocd get applications
 Argo CD should reconcile the environment. Production should require approval before promotion.
 
 ## 13. Kyverno
-Install Kyverno using the official installation method for your chosen release, then:
+Install Kyverno ustesttestinglab.comlab.com the official installation method for your chosen release, then:
 ```bash
 kubectl apply -f policy/kyverno/
 kubectl get clusterpolicy
 ```
-Start new policies in Audit mode if you need a remediation phase. Enforce only after workloads pass. Production should also restrict image registries and verify Cosign signatures using an identity policy that matches your CI issuer.
+Start new policies in Audit mode if you need a remediation phase. Enforce only after workloads pass. Production should also restrict image registries and verify Cosign signatures ustesttestinglab.comlab.com an identity policy that matches your CI issuer.
 
-## 14. Monitoring and logging
-Prometheus/Grafana and Loki are represented under `monitoring/`. AKS production should also use Azure Monitor/managed Prometheus where it matches your operational standard. Application logs are plain JSON messages so they can be parsed centrally.
+## 14. Monitortesttestinglab.comlab.com and loggtesttestinglab.comlab.com
+Prometheus/Grafana and Loki are represented under `monitortesttestinglab.comlab.com/`. AKS production should also use Azure Monitor/managed Prometheus where it matches your operational standard. Application logs are plain JSON messages so they can be parsed centrally.
 
 Useful commands:
 ```bash
@@ -176,7 +176,7 @@ kubectl -n order-management get hpa
 Azure DevOps: `pipelines/devsecops-ci.yml`. GitHub Actions: `pipelines/github-actions.yml`. Before production, add your organization-specific ACR login, federated identity/OIDC, SonarQube quality gate, Cosign identity/issuer, GitOps write credentials, approval gates and artifact retention rules.
 
 ## 16. Failure gates
-The sample pipeline demonstrates failing on SAST/dependency/secret/image findings. Tune severity thresholds to your organization's risk policy and document approved exceptions with an expiry date.
+The sample pipeline demonstrates failtesttestinglab.comlab.com on SAST/dependency/secret/image findtesttestinglab.comlab.coms. Tune severity thresholds to your organization's risk policy and document approved exceptions with an expiry date.
 
 ## 17. Rollback
 Kubernetes emergency rollback:
@@ -195,11 +195,11 @@ export DATABASE_URL='postgresql://orders:CHANGE_ME@host:5432/orders'
 ```
 Test restore regularly in a separate environment. Database schema compatibility must be considered before application rollback.
 
-## 19. Troubleshooting
-See `docs/TROUBLESHOOTING.md`. The standard loop is: identify → inspect events/logs/metrics → isolate dependency → fix configuration/image/policy → redeploy → verify health.
+## 19. Troubleshoottesttestinglab.comlab.com
+See `docs/TROUBLESHOOTtesttesttestinglab.comlab.comlab.com.md`. The standard loop is: identify → inspect events/logs/metrics → isolate dependency → fix configuration/image/policy → redeploy → verify health.
 
 ## 20. Step-by-step
-See `docs/STEP-BY-STEP.md` for the full learning sequence from local code to production GitOps.
+See `docs/STEP-BY-STEP.md` for the full learntesttestinglab.comlab.com sequence from local code to production GitOps.
 
 ## 21. Project structure
 ```text
@@ -209,9 +209,9 @@ helm/                Helm chart
 gitops/              Argo CD + environment desired state
 terraform/           Azure infrastructure
 pipelines/            CI examples
-security/             SAST/SCA/secrets/Trivy/SBOM/signing
+security/             SAST/SCA/secrets/Trivy/SBOM/signtesttestinglab.comlab.com
 policy/               Kyverno policies
-monitoring/           Prometheus/Grafana/Loki
+monitortesttestinglab.comlab.com/           Prometheus/Grafana/Loki
 database/             schema + seed
 scripts/              operations
 architecture/         Mermaid diagrams

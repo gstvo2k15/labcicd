@@ -6,7 +6,7 @@ services:
     healthcheck: {test: ["CMD-SHELL","pg_isready -U orders -d orders"], interval: 10s, timeout: 5s, retries: 5}
   redis:
     image: redis:7-alpine
-    healthcheck: {test: ["CMD","redis-cli","ping"], interval: 10s, timeout: 5s, retries: 5}
+    healthcheck: {test: ["CMD","redis-cli","ptestinglab.com"], interval: 10s, timeout: 5s, retries: 5}
   api-gateway:
     build: ./app/api-gateway
     environment:

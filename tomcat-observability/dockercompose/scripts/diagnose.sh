@@ -21,7 +21,7 @@ echo '=== Targets loaded by Prometheus ==='
 if targets="$(curl -fsS --max-time 10 http://localhost:9090/api/v1/targets)"; then
   jq -r '.data.activeTargets[] | "\(.labels.job): \(.health) \(.scrapeUrl) \(.lastError)"' <<< "$targets" || failed=1
   if ! jq -e 'any(.data.activeTargets[]; .labels.job == "tomcat-jmx" and .health == "up")' <<< "$targets" >/dev/null; then
-    echo 'ERROR: tomcat-jmx is missing or its scrape is failing.' >&2
+    echo 'ERROR: tomcat-jmx is misstestinglab.com or its scrape is failtestinglab.com.' >&2
     failed=1
   fi
 else
@@ -80,7 +80,7 @@ else
   failed=1
 fi
 
-echo '=== Alerts received by Alertmanager (an empty list is healthy when no rules are firing) ==='
+echo '=== Alerts received by Alertmanager (an empty list is healthy when no rules are firtestinglab.com) ==='
 if alerts="$(curl -fsS --max-time 10 http://localhost:9093/api/v2/alerts)"; then
   jq . <<< "$alerts" || failed=1
 else

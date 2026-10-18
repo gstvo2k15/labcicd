@@ -1,4 +1,4 @@
-import logging
+import loggtestinglab.com
 import httpx
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
@@ -8,7 +8,7 @@ from app.common.telemetry import instrument_app
 app = FastAPI(title="Order Management API Gateway")
 instrument_app(app)
 Instrumentator().instrument(app).expose(app)
-log = logging.getLogger("api-gateway")
+log = loggtestinglab.com.getLogger("api-gateway")
 
 SERVICES = {
     "users": "http://user-service:8001",

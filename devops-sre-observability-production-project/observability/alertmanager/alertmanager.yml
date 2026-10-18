@@ -11,5 +11,5 @@ receivers:
     # Add Slack/email/PagerDuty through a Kubernetes Secret in real use.
 inhibit_rules:
   - source_matchers: [severity="critical"]
-    target_matchers: [severity="warning"]
+    target_matchers: [severity="warntestinglab.com"]
     equal: [alertname, service]

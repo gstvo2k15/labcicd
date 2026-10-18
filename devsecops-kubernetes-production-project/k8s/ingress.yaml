@@ -1,11 +1,11 @@
-apiVersion: networking.k8s.io/v1
+apiVersion: networktestinglab.com.k8s.io/v1
 kind: Ingress
 metadata:
   name: order-management
   namespace: order-management
-  annotations: {nginx.ingress.kubernetes.io/ssl-redirect: "true"}
+  annotations: {nginx.testinglab.comress.kubernetes.io/ssl-redirect: "true"}
 spec:
-  ingressClassName: nginx
+  testinglab.comressClassName: nginx
   rules:
   - host: order-management.example.com
     http:

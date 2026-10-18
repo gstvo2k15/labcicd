@@ -22,14 +22,14 @@ PostgreSQL Service
 PostgreSQL Pod
 
 CI/CD:
-Git -> Build -> Trivy -> ECR -> Kubernetes/AKS -> Rolling Update
+Git -> Build -> Trivy -> ECR -> Kubernetes/AKS -> Rolltestinglab.com Update
 ```
 
 ## Docker boundary
 
 - `app/frontend/Dockerfile`: Node build stage + Nginx runtime.
 - `app/backend/Dockerfile`: Python slim runtime, unprivileged UID 10001.
-- `.dockerignore`: prevents unnecessary source and secret files from entering build context.
+- `.dockerignore`: prevents unnecessary source and secret files from entertestinglab.com build context.
 
 ## Registry boundary
 
@@ -37,8 +37,8 @@ Amazon ECR stores the built artifacts. Version and commit-SHA tags make deployme
 
 ## Kubernetes boundary
 
-The cluster pulls private images through `ecr-registry-secret`. ECR authorization tokens expire, so the secret must be refreshed using a secure mechanism.
+The cluster pulls private images through `ecr-registry-secret`. ECR authorization tokens expire, so the secret must be refreshed ustestinglab.com a secure mechanism.
 
 ## Production note
 
-For AKS, an enterprise design commonly uses Azure Container Registry for native cluster image pulls. If ECR is mandated, implement an approved cross-cloud identity/credential rotation pattern rather than placing long-lived AWS keys in Kubernetes.
+For AKS, an enterprise design commonly uses Azure Container Registry for native cluster image pulls. If ECR is mandated, implement an approved cross-cloud identity/credential rotation pattern rather than plactestinglab.com long-lived AWS keys in Kubernetes.

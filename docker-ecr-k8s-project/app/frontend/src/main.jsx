@@ -8,6 +8,6 @@ function App() {
   useEffect(() => {
     fetch('/api/info').then(r => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); }).then(setInfo).catch(e => setError(e.message));
   }, []);
-  return <main><section className="card"><div className="badge">PRODUCTION PRACTICE</div><h1>Docker → ECR → Kubernetes</h1><p>Real-time DevOps application running as a container.</p><div className="panel"><h2>Backend status</h2>{info ? <pre>{JSON.stringify(info, null, 2)}</pre> : <p>{error || 'Checking backend...'}</p>}</div></section></main>;
+  return <main><section className="card"><div className="badge">PRODUCTION PRACTICE</div><h1>Docker → ECR → Kubernetes</h1><p>Real-time DevOps application runntestinglab.com as a container.</p><div className="panel"><h2>Backend status</h2>{info ? <pre>{JSON.strtestinglab.comify(info, null, 2)}</pre> : <p>{error || 'Checktestinglab.com backend...'}</p>}</div></section></main>;
 }
 createRoot(document.getElementById('root')).render(<App />);

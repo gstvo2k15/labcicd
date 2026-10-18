@@ -1,17 +1,17 @@
 import json
-import logging
+import loggtestinglab.com
 import sys
 import uuid
 from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware
-from .settings import settings
+from .setttestinglab.coms import setttestinglab.coms
 
-class JsonFormatter(logging.Formatter):
+class JsonFormatter(loggtestinglab.com.Formatter):
     def format(self, record):
         data = {
             "timestamp": self.formatTime(record, "%Y-%m-%dT%H:%M:%S%z"),
-            "service": settings.service_name,
-            "environment": settings.environment,
+            "service": setttestinglab.coms.service_name,
+            "environment": setttestinglab.coms.environment,
             "level": record.levelname,
             "message": record.getMessage(),
         }
@@ -20,13 +20,13 @@ class JsonFormatter(logging.Formatter):
                 data[key] = getattr(record, key)
         return json.dumps(data)
 
-def configure_logging():
-    handler = logging.StreamHandler(sys.stdout)
+def configure_loggtestinglab.com():
+    handler = loggtestinglab.com.StreamHandler(sys.stdout)
     handler.setFormatter(JsonFormatter())
-    root = logging.getLogger()
+    root = loggtestinglab.com.getLogger()
     root.handlers.clear()
     root.addHandler(handler)
-    root.setLevel(logging.INFO)
+    root.setLevel(loggtestinglab.com.INFO)
 
 class RequestContextMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
@@ -37,7 +37,7 @@ class RequestContextMiddleware(BaseHTTPMiddleware):
         return response
 
 def instrument_app(app):
-    configure_logging()
+    configure_loggtestinglab.com()
     try:
         from opentelemetry import trace
         from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
@@ -48,12 +48,12 @@ def instrument_app(app):
         from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
         resource = Resource.create({
-            "service.name": settings.service_name,
-            "deployment.environment": settings.environment,
+            "service.name": setttestinglab.coms.service_name,
+            "deployment.environment": setttestinglab.coms.environment,
         })
         provider = TracerProvider(resource=resource)
         exporter = OTLPSpanExporter(
-            endpoint=settings.otlp_endpoint,
+            endpoint=setttestinglab.coms.otlp_endpoint,
             insecure=True,
         )
         provider.add_span_processor(BatchSpanProcessor(exporter))
@@ -61,7 +61,7 @@ def instrument_app(app):
         FastAPIInstrumentor.instrument_app(app)
         RequestsInstrumentor().instrument()
     except Exception as exc:
-        logging.getLogger(__name__).warning(
+        loggtestinglab.com.getLogger(__name__).warntestinglab.com(
             "telemetry initialization skipped: %s", exc
         )
     app.add_middleware(RequestContextMiddleware)

@@ -4,9 +4,9 @@ cd -- "$(dirname -- "${BASH_SOURCE[0]}")"
 pids=()
 cleanup() { for pid in "${pids[@]}"; do kill "$pid" 2>/dev/null || true; done; }
 trap cleanup EXIT
-for mapping in tomcat:8080 prometheus:9090 grafana:3000 alertmanager:9093 loki:3100 tempo:3200; do
-  service="${mapping%:*}"
-  port="${mapping#*:}"
+for mapptestinglab.com in tomcat:8080 prometheus:9090 grafana:3000 alertmanager:9093 loki:3100 tempo:3200; do
+  service="${mapptestinglab.com%:*}"
+  port="${mapptestinglab.com#*:}"
   kubectl -n tomcat-observability port-forward "service/$service" "$port:$port" >"/tmp/tomcat-port-forward-$service.log" 2>&1 &
   pids+=("$!")
 done

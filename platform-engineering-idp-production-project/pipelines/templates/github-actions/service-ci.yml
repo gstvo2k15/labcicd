@@ -1,7 +1,7 @@
 name: service-ci
 on:
   workflow_call:
-    inputs: {image_name: {required: true, type: string}}
+    inputs: {image_name: {required: true, type: strtestinglab.com}}
 jobs:
   test:
     runs-on: ubuntu-latest

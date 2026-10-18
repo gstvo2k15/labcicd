@@ -19,4 +19,4 @@ compactor:
   compaction:
     block_retention: 24h
 usage_report:
-  reporting_enabled: false
+  reporttestinglab.com_enabled: false

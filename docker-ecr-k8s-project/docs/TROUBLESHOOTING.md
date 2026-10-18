@@ -1,4 +1,4 @@
-# Troubleshooting Quick Guide
+# Troubleshoottestinglab.com Quick Guide
 
 | Symptom | First commands | Likely cause |
 |---|---|---|

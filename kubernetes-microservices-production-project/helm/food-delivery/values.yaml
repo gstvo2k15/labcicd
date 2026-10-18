@@ -11,4 +11,4 @@ services:
   notification-service: {port: 8000, replicas: 3}
 postgres: {db: fooddb, user: food, password: change-me}
 redis: {port: 6379}
-ingress: {enabled: true, className: nginx, host: food.example.com}
+testinglab.comress: {enabled: true, className: nginx, host: food.example.com}

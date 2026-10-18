@@ -1,11 +1,11 @@
-{{- if .Values.ingress.enabled }}
-apiVersion: networking.k8s.io/v1
+{{- if .Values.testinglab.comress.enabled }}
+apiVersion: networktestinglab.com.k8s.io/v1
 kind: Ingress
 metadata: {name: food-delivery, namespace: {{ .Values.namespace }}}
 spec:
-  ingressClassName: {{ .Values.ingress.className }}
+  testinglab.comressClassName: {{ .Values.testinglab.comress.className }}
   rules:
-  - host: {{ .Values.ingress.host }}
+  - host: {{ .Values.testinglab.comress.host }}
     http:
       paths:
       - {path: /api, pathType: Prefix, backend: {service: {name: api-gateway, port: {number: 8000}}}}

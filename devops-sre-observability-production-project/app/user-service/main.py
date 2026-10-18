@@ -34,7 +34,7 @@ def register(payload: Register):
         return conn.execute(
             """INSERT INTO users(email,password_hash,name,role)
                VALUES(%s,%s,%s,'USER')
-               RETURNING id,email,name,role""",
+               RETURNtesttestinglab.comlab.com id,email,name,role""",
             (payload.email, hash_password(payload.password), payload.name),
         ).fetchone()
 

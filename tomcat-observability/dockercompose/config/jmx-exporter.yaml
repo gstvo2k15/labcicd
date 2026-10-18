@@ -10,13 +10,13 @@ rules:
     labels:
       serverInfo: "$1"
     type: GAUGE
-  - pattern: 'Catalina<type=GlobalRequestProcessor, name="([^" ]+)-(\d+)"><>(bytesReceived|bytesSent|requestCount|errorCount|processingTime):'
+  - pattern: 'Catalina<type=GlobalRequestProcessor, name="([^" ]+)-(\d+)"><>(bytesReceived|bytesSent|requestCount|errorCount|processtestinglab.comTime):'
     name: tomcat_$3_total
     labels:
       protocol: "$1"
       port: "$2"
     type: COUNTER
-  - pattern: 'Catalina<j2eeType=Servlet, WebModule=//([^,]+), name=([^,]+), J2EEApplication=none, J2EEServer=none><>(requestCount|processingTime|errorCount):'
+  - pattern: 'Catalina<j2eeType=Servlet, WebModule=//([^,]+), name=([^,]+), J2EEApplication=none, J2EEServer=none><>(requestCount|processtestinglab.comTime|errorCount):'
     name: tomcat_servlet_$3_total
     labels:
       module: "$1"
@@ -28,7 +28,7 @@ rules:
       protocol: "$1"
       port: "$2"
     type: GAUGE
-  - pattern: 'Catalina<type=Manager, host=([^,]+), context=([^>]+)><>(processingTime|sessionCounter|rejectedSessions|expiredSessions):'
+  - pattern: 'Catalina<type=Manager, host=([^,]+), context=([^>]+)><>(processtestinglab.comTime|sessionCounter|rejectedSessions|expiredSessions):'
     name: tomcat_session_$3_total
     labels:
       host: "$1"
